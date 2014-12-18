@@ -11,9 +11,25 @@
 }
 
 .logo {
+	font-size: 20px;
+	font-weight: bold;
+	font-style: italic;
 	float: left;
 }
 
 .login {
 	float: right;
+}
+
+.dropseperator {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.navbar-nav>li>a:hover, .navbar-nav>li>a:active {
+  background-color: #6D9BC3 !important;
+}
+
+.navbar-nav>li>a:focus {
+  background-color: #FFCCCB !important;
 }
