@@ -1,6 +1,6 @@
 .header {
 	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-bottom: 45px;
 	padding-left: 50px;
 	padding-right: 50px;
 }
@@ -19,6 +19,8 @@
 
 .login {
 	float: right;
+	background-image: linear-gradient(to bottom,#fff 0,#f0f5f9 100%) !important;
+	font-size: 13px !important;
 }
 
 .dropseperator {
@@ -31,5 +33,6 @@
 }
 
 .navbar-nav>li>a:focus {
-  background-color: #FFCCCB !important;
+  background-color: #e1ebf3 !important;
+  color: #6D9BC3 !important;
 }
