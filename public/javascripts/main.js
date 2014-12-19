@@ -1,3 +1,0 @@
-function popupLogin() {
-	$("#loginPop").show();
-}
