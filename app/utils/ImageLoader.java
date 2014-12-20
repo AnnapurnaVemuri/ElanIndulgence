@@ -33,6 +33,12 @@ public class ImageLoader {
 	private static final int ETHNIC_GIRLS = 13;
 	private static final int FROCKS = 14;
 	private static final int ETHNIC_BOYS = 15;
+	private static final int SLIDES = 16;
+	private static final int CLUTCHES = 17;
+	private static final int EARRINGS = 18;
+	private static final int SHOES = 19;
+	private static final int STOLE = 20;
+	
 	
 	private static final int ANITA_REDDY = 1;
 	private static final int BHARGAVAI_KUNAM = 2;
@@ -43,6 +49,9 @@ public class ImageLoader {
 	private static final int MANYA = 7;
 	private static final int POLKA_DOTS = 8;
 	private static final int SAMYAKK = 9;
+	private static final int OTHER = 9;
+	private static final int MANYA_COLLEC = 10;
+	private static final int SANVI= 11;
 
 	private static final int RED = 1;
 	private static final int BLUE = 2;
@@ -93,15 +102,22 @@ public class ImageLoader {
 				File[] merchants = folder.listFiles();
 				for (File merchant : merchants) {
 					String merchantName = merchant.getName();
+
+					System.out.println("Merchant Name: "+merchantName);
 					int merchantId = getmerchantID(merchantName);
 					File[] productTypes = merchant.listFiles();
 					for (File productType : productTypes) {
 						String type = productType.getName();
+						System.out.println("Product Type: "+type);
 						int typeId = getProductTypeID(type);
 						File[] files = productType.listFiles();
 						for (File file : files) {
 							List<String> colors = new ArrayList<String>();
-							String[] colorString = file.getName().split("_");
+							String name=file.getName();
+							System.out.println(name);
+							String[] arr=name.split("\\.");
+							name=arr[0];
+							String[] colorString = name.split("_");
 							if (colorString.length > 1) {
 								for (int i = 1; i < colorString.length; i++) {
 									colors.add(colorString[i]);
@@ -112,12 +128,14 @@ public class ImageLoader {
 								fis = new FileInputStream(file);
 								insertImage.setInt(1, CURRENT_ID);
 								insertImage.setBinaryStream(2, fis, file.length());
-								insertImage.addBatch();
+								insertImage.executeUpdate();
+								//insertImage.addBatch();
 								for (String color : colors) {
 									int colorid = getColorID(color);
+									if(colorid!=-1){
 									addColors.setInt(1, CURRENT_ID);
 									addColors.setInt(2, colorid);
-									addColors.addBatch();
+									addColors.addBatch();}
 								}
 								addProduct.setInt(1, CURRENT_ID);
 								addProduct.setInt(2, CURRENT_ID);
@@ -145,14 +163,17 @@ public class ImageLoader {
 					}
 				}
 			}
-			insertImage.executeBatch();
+			//insertImage.executeBatch();
 			addProduct.executeBatch();
 			addColors.executeBatch();
 		} else {
 			System.out.println("Enter valid folder path");
 			System.exit(-1);
 		}
-		} finally {
+		} catch(Exception e){
+			e.printStackTrace();
+			
+		}finally {
 			if (conn != null) {
 				conn.close();
 			} 
@@ -174,7 +195,7 @@ public class ImageLoader {
 		return rand.nextFloat() * (max - min) + min;
 	}
 
-	private int getColorID(String color) {
+	private int getColorID(String color) throws Exception {
 		if (color.equalsIgnoreCase("red")) {
 			return RED;
 		} else if (color.equalsIgnoreCase("blue")) {
@@ -205,9 +226,10 @@ public class ImageLoader {
 			return BROWN;
 		} 
 		return -1;
+		//throw new Exception(color);
 	}
 
-	private int getmerchantID(String merchantName) {
+	private int getmerchantID(String merchantName) throws Exception {
 		if (merchantName.equalsIgnoreCase("anitha_reddy")) {
 			return ANITA_REDDY;
 		} else if (merchantName.equalsIgnoreCase("bhargavi_kunam")) {
@@ -226,11 +248,17 @@ public class ImageLoader {
 			return POLKA_DOTS;
 		} else if (merchantName.equalsIgnoreCase("samyakk")) {
 			return SAMYAKK;
+		} else if (merchantName.equalsIgnoreCase("other")) {
+			return OTHER;
+		}else if (merchantName.equalsIgnoreCase("manya_collections")) {
+			return MANYA_COLLEC;
+		} else if (merchantName.equalsIgnoreCase("sanvi")) {
+			return SANVI;
 		} 
-		return -1;
+		throw new Exception(merchantName);
 	}
 
-	private int getProductTypeID(String type) {
+	private int getProductTypeID(String type) throws Exception {
 		if (type.equalsIgnoreCase("sarees")) {
 			return SAREE;
 		} else if (type.equalsIgnoreCase("lehengas")) {
@@ -255,14 +283,25 @@ public class ImageLoader {
 			return SCARVES;
 		} else if (type.equalsIgnoreCase("footwear")) {
 			return FOOTWEAR;
-		} else if (type.equalsIgnoreCase("girl_ethnic")) {
+		} else if (type.equalsIgnoreCase("ethnic_girls")) {
 			return ETHNIC_GIRLS;
-		} else if (type.equalsIgnoreCase("girl_dress")) {
+		} else if (type.equalsIgnoreCase("dress_girls")) {
 			return FROCKS;
-		} else if (type.equalsIgnoreCase("boy_ethnic")) {
+		} else if (type.equalsIgnoreCase("ethnic_boys")) {
 			return ETHNIC_BOYS;
+		}else if (type.equalsIgnoreCase("slides")) {
+			return SLIDES;
+		}else if (type.equalsIgnoreCase("clutches")) {
+			return CLUTCHES;
+		}else if (type.equalsIgnoreCase("earrings")) {
+			return EARRINGS;
+		}else if (type.equalsIgnoreCase("shoes")) {
+			return SHOES;
+		}else if (type.equalsIgnoreCase("stole")) {
+			return STOLE;
 		}
-		return -1;
+		throw new Exception(type);
+		
 	}
 
 	private Connection initializeConnection() {
