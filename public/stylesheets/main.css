@@ -6,16 +6,17 @@
 }
 
 .transparent {
-	border: 0px;
-	background: transparent;
+	border: 0px !important;
+	background: transparent !important;
 }
 
 .logo {
-	font-size: 20px;
-	font-weight: bold;
-	font-family: cursive;
+	font-size: 20px  !important;
+	font-weight: bold !important;
+	font-family: cursive !important;
 	float: left;
-	color: #628baf;	
+	color: #628baf !important;	
+	text-decoration: none !important;
 }
 
 .login {
@@ -51,6 +52,11 @@
 
 .centerh4 {
     text-align: center;
+	color: #628baf;	
+}
+
+.centerh4 {
+    text-align: center;
 	color: #628baf;
 	padding-bottom:10px	;
 }
@@ -63,4 +69,20 @@
 
 label {
 	color: #628baf;	
+}
+
+.user {
+	float: right;
+	border: 1px solid #ccc;
+	background-image: linear-gradient(to bottom,#fff 0,#f0f5f9 100%) !important;
+	font-size: 13px !important;
+	color: #628baf !important;
+}
+
+.prefSave {
+	width: 125px;
+	color: white !important;
+	font-weight: bold !important;
+	background-image: none !important;
+	background-color: #337ab7 !important;
 }

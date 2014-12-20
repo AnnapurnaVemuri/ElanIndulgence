@@ -1,0 +1,211 @@
+@(user: String, register: String)
+
+<div>
+	<div class="header">
+		<a href="@routes.Application.loadMain()" role="button"
+			class="transparent logo">Elan Indulgence</a>
+		<div class="btn-group user">
+			<button type="button" class="btn user">Welcome @{user}</button>
+			<button type="button" class="btn dropdown-toggle user"
+				data-toggle="dropdown" aria-expanded="false">
+				<span class="caret"></span> <span class="sr-only">Toggle
+					Dropdown</span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="#" style="font-size: 10px;">DETAILS</a></li>
+				<li class="divider"></li>
+				<li><a href="#" role="button" class="transparent"
+					data-toggle="modal" data-target="#prefmodal"
+					style="font-size: 10px;">PREFERENCES</a></li>
+				<li class="divider"></li>
+				<li><a href="#" style="font-size: 10px;">ORDERS</a></li>
+				<li class="divider"></li>
+				<li><a href="#" style="font-size: 10px;">RATINGS</a></li>
+				<li class="divider"></li>
+				<li><a href="@routes.Application.loadMain()"
+					style="font-size: 10px;">LOGOUT</a></li>
+			</ul>
+		</div>
+	</div>
+	@register match { 
+			case "TRUE" => {
+							<script type="text/javascript">
+							    $(window).load(function(){
+							        $("#prefmodal").modal('show');
+							    });
+							</script>
+						   }
+			case "FALSE" => { } 
+		}
+	<div id="prefmodal" class="modal fade" role="dialog"
+		aria-labelledby="prefModal">
+		<div class="modal-dialog" style="width: 800px; margin-top: 50px;">
+			<div class="modal-content" style="height: 550px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="loginh3" style="font-family: fantasy;font-weight: bold">Welcome
+						@{user}! Please fill your preferences</h3>
+				</div>
+				<div class="modal-body" id="pmodal">
+					<form id="prefForm" method="post" action="@routes.Application.saveUserPreferences()">
+						<div id="typePref" style="border-bottom: 1px solid #ccc">
+							<h3 style="text-align: center; padding-bottom: 10px">
+								<span class="label label-primary">Product Preferences</span>
+							</h3>
+							<div class="container">
+								<div class="row">
+									<div  class="col-xs-2">
+										<label>
+											<span class="label label-primary">Women</span>
+										</label>
+										<div class="form-group">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="1">SAREES
+											</label>
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="2">LEHENGAS
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="3">KURTIS
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="4">SALWAR KAMEEZ
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="5">DRESSES
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="6">JEWELLERY
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="7">BAGS
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="8">FOOTWEAR
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="9">SCARVES
+											</label>
+										</div>
+									</div>
+									<div  class="col-xs-2">
+										<label>
+											<span class="label label-primary">Men</span>
+										</label>
+										<div class="form-group">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="10">SHERWANI
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="11">KURTAS
+											</label> 
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+												<input type="checkbox" value="12">SUITS
+											</label>
+										</div>
+									</div>
+									<div  class="col-xs-4">
+										<div class="col-sm-offset-4">
+											<label><span class="label label-primary">Kids</span></label>
+										</div>
+										<div class="container">
+											<div class="row">
+												<div class="col-xs-2">
+													<div>
+														<label><span class="label label-primary">Girls</span></label>
+													</div>
+													<div class="form-group">
+														<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+															<input type="checkbox" value="13">ETHNIC WEAR
+														</label>
+														<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+															<input type="checkbox" value="14">DRESSES
+														</label>
+													</div>
+												</div>
+												<div class="col-xs-2">
+													<div>
+														<label><span class="label label-primary">Boys</span></label>
+													</div>
+													<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+														<input type="checkbox" value="15">ETHNIC WEAR
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="colorPref">
+							<h3 style="text-align: center; padding-bottom: 10px">
+								<span class="label label-primary">Color Preferences</span>
+							</h3>
+							<div class="container-fluid form-group">
+								<label class="checkbox-inline" style="font-size: 12px; color: red"> 
+									<input type="checkbox" value="16">RED
+								</label> 
+								<label class="checkbox-inline" style="font-size: 12px; color: blue"> 
+									<input type="checkbox" value="17">BLUE
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: green"> <input
+									type="checkbox" value="18">GREEN
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: black"> <input
+									type="checkbox" value="19">BLACK
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: yellow"> <input
+									type="checkbox" value="20">YELLOW
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: silver"> <input
+									type="checkbox" value="21">SILVER
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: gold"> <input
+									type="checkbox" value="22">GOLD
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: purple"> <input
+									type="checkbox" value="23">PURPLE
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: pink"> <input
+									type="checkbox" value="24">PINK
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: orange"> <input
+									type="checkbox" value="25">ORANGE
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: cream"> <input
+									type="checkbox" value="26">CREAM
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: #e1ebf3"> <input
+									type="checkbox" value="27">WHITE
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: grey"> <input
+									type="checkbox" value="28">GREY
+								</label> 
+								<label class="checkbox-inline"
+									style="font-size: 12px; color: brown"> <input
+									type="checkbox" value="29">BROWN
+								</label>
+								<input type="checkbox" class="hide" value=@user name="username">
+							</div>
+						</div>
+						<div class="form-group" style="float:right">
+				            <button type="submit" class="btn btn-default prefSave">Save</button>
+				        </div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
