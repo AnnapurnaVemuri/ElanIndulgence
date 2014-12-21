@@ -1,14 +1,10 @@
 <script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jquery-1.9.1.min.js")"></script>
-    <!-- use jssor.slider.mini.js (40KB) instead for release -->
-    <!-- jssor.slider.mini.js = (jssor.js + jssor.slider.js) -->
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jssor.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jssor.slider.js")"></script>
-    <script>
-
-        jQuery(document).ready(function ($) {
-
-            var _SlideshowTransitions = [
-            //Fade
+<script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jssor.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jssor.slider.js")"></script>
+<script>
+	jQuery(document).ready(function ($) {
+		var _SlideshowTransitions = [
+         //Fade
             { $Duration: 1200, $Opacity: 2 }
             ];
 
@@ -18,12 +14,12 @@
                 $AutoPlayInterval: 3000,                            //[Optional] Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing, default value is 3000
                 $PauseOnHover: 1,                               //[Optional] Whether to pause when mouse over if a slider is auto playing, 0 no pause, 1 pause for desktop, 2 pause for touch device, 3 pause for desktop and touch device, 4 freeze for desktop, 8 freeze for touch device, 12 freeze for desktop and touch device, default value is 1
 
-                $ArrowKeyNavigation: true,   			            //[Optional] Allows keyboard (arrow key) navigation or not, default value is false
+                $ArrowKeyNavigation: true,                           //[Optional] Allows keyboard (arrow key) navigation or not, default value is false
                 $SlideDuration: 500,                                //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
                 $MinDragOffsetToSlide: 20,                          //[Optional] Minimum drag offset to trigger slide , default value is 20
                 //$SlideWidth: 600,                                 //[Optional] Width of every slide in pixels, default value is width of 'slides' container
                 //$SlideHeight: 300,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
-                $SlideSpacing: 0, 					                //[Optional] Space between each slide in pixels, default value is 0
+                $SlideSpacing: 0,                                     //[Optional] Space between each slide in pixels, default value is 0
                 $DisplayPieces: 1,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
                 $ParkingPosition: 0,                                //[Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
                 $UISearchMode: 1,                                   //[Optional] The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).
@@ -75,7 +71,8 @@
     </script>
     <!-- Jssor Slider Begin -->
     <!-- You can move inline styles to css file or css block. -->
-    <div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 600px; height: 300px; overflow: hidden; ">
+<div class="container-fluid" style="padding-left:345px">
+    <div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 400px; height: 350px; overflow: hidden;">
 
         <!-- Loading Screen -->
         <div u="loading" style="position: absolute; top: 0px; left: 0px;">
@@ -88,16 +85,55 @@
         </div>
 
         <!-- Slides Container -->
-        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 600px; height: 300px; overflow: hidden;">
-            <div>
-                <img u="image" src="@routes.Assets.at("images/testSlider/01.jpg")" />
+        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 400px; height: 350px; overflow: hidden; align-component: center;">
+             <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/10.jpg")" />
             </div>
             <div>
-                <img u="image" src="@routes.Assets.at("images/testSlider/02.jpg")" />
+                <img u="image" src="@routes.Assets.at("images/homeslider/11.jpg")" />
             </div>
             <div>
-                <img u="image" src="@routes.Assets.at("images/testSlider/03.jpg")" />
+                <img u="image" src="@routes.Assets.at("images/homeslider/12.jpg")" />
             </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/13.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/14.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/15.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/17.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/18.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/19.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/20.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/1.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/2.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/3.jpg")" />
+            </div>
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/4.jpg")" />
+            </div>
+           
+            <div>
+                <img u="image" src="@routes.Assets.at("images/homeslider/7.jpg")" />
+            </div>
+          
+           
                 </div>
 
         <!-- Bullet Navigator Skin Begin -->
@@ -190,4 +226,4 @@
         <!-- Arrow Navigator Skin End -->
         <a style="display: none" href="http://www.jssor.com">bootstrap slider</a>
     </div>
-    
+</div>

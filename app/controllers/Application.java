@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Merchant;
 import models.UserInfo;
 import play.data.Form;
 import play.db.DB;
@@ -84,5 +85,68 @@ public class Application extends Controller {
     	}
     	return ok("Saving user preferences");
     }
+    
+    public static Result getNewArrivals() {
+    	return ok();
+    }
+    
+    public static Result merchantValidation() {
+    	Merchant info = Form.form(Merchant.class).bindFromRequest().get();
+    	return checkMerchantExist(info.username, info.password, false);
+    }
+    
+    public static Result registerMerchant() {
+    	Merchant info = Form.form(Merchant.class).bindFromRequest().get();
+    	info.save();
+    	return checkMerchantExist(info.username, info.password, true);
+    }
+    
+    private static Result checkMerchantExist(String username, String password, boolean isRegister) {
+    	Statement statement = null;
+    	ResultSet rs = null;
+    	Connection connection = null;
+    	System.out.println("username:" + username);
+    	String stmt = "select * from " + DatabaseConstants.MERCHANT_TABLE + " where username = '" + username + "' and password = '" + password + "'";
+    	try {
+    		connection = DB.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(stmt);
+			if (rs.next()) {
+				if (isRegister) {
+					return ok(merchant1.render(username));
+				} else {
+					return ok(merchant1.render(username));
+				}
+			} else {
+				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+    	return ok();
+    }
+
 
 }

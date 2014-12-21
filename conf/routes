@@ -11,7 +11,17 @@ POST	/register					controllers.Application.registerUser()
 # Login validation
 POST	/login						controllers.Application.loginValidation()
 
+# Merchant registration
+POST	/merreg						controllers.Application.registerMerchant()
+
+# Merchant validation
+POST	/merval						controllers.Application.merchantValidation()
+
 # Add user preferences
 POST	/savepref					controllers.Application.saveUserPreferences()
+
+# Get latest products
+GET		/newarrivals				controllers.Application.getNewArrivals()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
