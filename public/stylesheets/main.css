@@ -64,7 +64,8 @@
 }
 
 label {
-	color: #628baf;	
+	color: #628baf;
+	font-family: fantasy;
 }
 
 .user {
@@ -81,6 +82,7 @@ label {
 	background-image: none !important;
 	background-color: #337ab7 !important;
 	text-shadow: none !important;
+	font-family: fantasy !important;
 }
 
 .footer-section {

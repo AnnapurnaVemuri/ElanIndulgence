@@ -11,6 +11,9 @@ POST	/register					controllers.Application.registerUser()
 # Login validation
 POST	/login						controllers.Application.loginValidation()
 
+# Go to user page
+GET		/user						controllers.Application.getUser(q:String, r:String)
+
 # Merchant registration
 POST	/merreg						controllers.Application.registerMerchant()
 
@@ -19,6 +22,9 @@ POST	/merval						controllers.Application.merchantValidation()
 
 # Add user preferences
 POST	/savepref					controllers.Application.saveUserPreferences()
+
+# Go to merchant page
+GET		/merchant					controllers.Application.getMerchant(q:String)
 
 # Get latest products
 GET		/newarrivals				controllers.Application.getNewArrivals()

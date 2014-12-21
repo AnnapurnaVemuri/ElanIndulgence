@@ -31,6 +31,10 @@ public class Application extends Controller {
     	return checkUserExist(info.username, info.password, false);
     }
     
+    public static Result getUser(String username, String newReq) {
+    	return ok(user.render(username, newReq));
+    }
+    
     private static Result checkUserExist(String username, String password, boolean isRegister) {
     	Statement statement = null;
     	ResultSet rs = null;
@@ -42,12 +46,12 @@ public class Application extends Controller {
 			rs = statement.executeQuery(stmt);
 			if (rs.next()) {
 				if (isRegister) {
-					return ok(user.render(username, "TRUE"));
+					return redirect(controllers.routes.Application.getUser(username, "TRUE"));
 				} else {
-					return ok(user.render(username, "FALSE"));
+					return redirect(controllers.routes.Application.getUser(username, "FALSE"));
 				}
 			} else {
-				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
+				return redirect(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,6 +105,9 @@ public class Application extends Controller {
     	return checkMerchantExist(info.username, info.password, true);
     }
     
+    public static Result getMerchant(String user) {
+    	return ok(merchant.render(user));
+    }
     private static Result checkMerchantExist(String username, String password, boolean isRegister) {
     	Statement statement = null;
     	ResultSet rs = null;
@@ -113,9 +120,9 @@ public class Application extends Controller {
 			rs = statement.executeQuery(stmt);
 			if (rs.next()) {
 				if (isRegister) {
-					return ok(merchant1.render(username));
+					return redirect(controllers.routes.Application.getMerchant(username));
 				} else {
-					return ok(merchant1.render(username));
+					return redirect(controllers.routes.Application.getMerchant(username));
 				}
 			} else {
 				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
