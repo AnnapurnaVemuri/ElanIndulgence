@@ -14,6 +14,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import controllers.FilterDB.Combo;
 
 public class Application extends Controller {
 
@@ -102,8 +106,20 @@ public class Application extends Controller {
     	return checkMerchantExist(info.username, info.password, true);
     }
     
-    public static Result getMerchant(String user) {
-    	return ok(merchant.render(user));
+    public static Result getMerchant(String user, int page_num) {
+    	List<Integer> merchantList = new ArrayList<Integer>();
+    	merchantList.add(1);
+    	List<Integer> prodType = new ArrayList<Integer>();
+    	List<Integer> color = new ArrayList<Integer>();
+    	List<Combo> price = new ArrayList<Combo>();
+    	List<Integer> rating = new ArrayList<Integer>();
+    	List<Product> prods = new ArrayList<Product>();
+    	try {
+        	prods = FilterDB.getProductByCompleteWithoutColor(page_num, prodType, merchantList, color, price, rating);	
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return ok(merchant.render(user, prods));
     }
     private static Result checkMerchantExist(String username, String password, boolean isRegister) {
     	Statement statement = null;
@@ -117,9 +133,9 @@ public class Application extends Controller {
 			rs = statement.executeQuery(stmt);
 			if (rs.next()) {
 				if (isRegister) {
-					return redirect(controllers.routes.Application.getMerchant(username));
+					return redirect(controllers.routes.Application.getMerchant(username,1));
 				} else {
-					return redirect(controllers.routes.Application.getMerchant(username));
+					return redirect(controllers.routes.Application.getMerchant(username,1));
 				}
 			} else {
 				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));

@@ -12,9 +12,9 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 
 import models.Product;
-import models.ui.OrderUI;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.productlist;
 
 public class FilterDB extends Controller {
 	private static String db_url = "jdbc:postgresql://cloudproj.ct233hyipvfx.us-east-1.rds.amazonaws.com:5432/elandb";
@@ -39,8 +39,9 @@ public class FilterDB extends Controller {
 		return conn;
 	}
 
-	public static Result getProductByProdTypeAndRatingWithoutColor(
-			int page_num, int prod_type) throws Exception {
+	public static Result getProductByProdTypeAndRatingWithoutColor(int prod_type,
+			int page_num) throws Exception {
+		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
@@ -85,7 +86,6 @@ public class FilterDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -123,7 +123,7 @@ public class FilterDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return ok(productlist.render(prodList));
 	}
 
 	public static Result getProductByProdTypeAndRatingWithColor(int page_num,
@@ -227,11 +227,10 @@ public class FilterDB extends Controller {
 		public Integer end;
 	}
 
-	public static Result getProductByCompleteWithoutColor(int page_num,
-			List<Integer> prod_type, List<String> merch, List<Combo> price,
-			List<Integer> rating)// , List<Integer> merchant, List<Combo>
-									// price,List<Integer> rating)
+	public static List<Product> getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<String> merch,
+			List<Combo> price,List<Integer> rating)//, List<Integer> merchant, List<Combo> price,List<Integer> rating)
 			throws Exception {
+		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
@@ -344,7 +343,6 @@ public class FilterDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -382,7 +380,7 @@ public class FilterDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
 	}
 
 	public static Result getProductByForSideFilterWithColour(int page_num,

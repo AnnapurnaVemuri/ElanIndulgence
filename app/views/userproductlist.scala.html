@@ -1,4 +1,4 @@
-@(products : List[Product])
+@(username : String, products : List[Product])
 
 <!DOCTYPE html>
 
@@ -31,8 +31,8 @@
 	    }
     </script>
     <body>
-    	@header()
-    	@navigation()
+    	@userheader(username, "FALSE")
+    	@usernav(username)
 		<div class="container" style="padding-left:0px">
 			<div class="row" style="padding-left:0px">
 				<div class="col-sm-3" style="padding-left:0px">
@@ -54,7 +54,7 @@
 					            	var i = @product.prod_id;
 					            	$("#@product.prod_id").click(function() {
 					            		var url = window.location.href.split("/")[0];
-						        		window.location.href = url + "/product?p=" + @product.prod_id;
+						        		window.location.href = url + "/uproduct?u=@username&p=" + @product.prod_id;
 					            	});
 					            </script>
 							}
@@ -79,30 +79,14 @@
 	    		
 	    		$("#older").click(function() {
 	        		var curr = parseInt(getUrlParameter("p")) - 1;
-	        		var ampsplit = window.location.href.split("&p");
-	        		var url;
-	        		if (ampsplit.length > 1) {
-	        			url = ampsplit[0];
-	        			window.location.href = url + "&p=" + curr;
-	        		} else {
-	        			var quesplit = window.location.href.split("?p");
-	        			url = quesplit[0];
-	        			window.location.href = url + "?p=" + curr;
-	        		}
+	        		var url = window.location.href.split("?")[0];
+	        		window.location.href = url + "?u=@username&p=" + curr;
 	        	});
 	        	
 	        	$("#newer").click(function() {
 	        		var curr = parseInt(getUrlParameter("p")) + 1;
-	        		var ampsplit = window.location.href.split("&p");
-	        		var url;
-	        		if (ampsplit.length > 1) {
-	        			url = ampsplit[0];
-	        			window.location.href = url + "&p=" + curr;
-	        		} else {
-	        			var quesplit = window.location.href.split("?p");
-	        			url = quesplit[0];
-	        			window.location.href = url + "?p=" + curr;
-	        		}
+	        		var url = window.location.href.split("?")[0];
+	        		window.location.href = url + "?u=@username&p=" + curr;
 	        	});
 	        	$("body").css("background-image", "url('assets/images/bg4.jpg')");
 	    	};

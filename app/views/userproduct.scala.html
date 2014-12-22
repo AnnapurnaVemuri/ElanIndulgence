@@ -1,0 +1,74 @@
+@(u:String, p : Product)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Elan Indulgence</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link href="@routes.Assets.at("stylesheets/star-rating.min.css")" media="all" rel="stylesheet" type="text/css" />
+        <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.map")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/star-rating.min.js")" type="text/javascript"></script>
+    </head>
+    <body>
+    	@userheader(u, "FALSE")
+    	@usernav(u)
+    	<div class="container">
+			<div class="row">
+				<div class="col-sm-6" style="width: 400px;">
+					<img src="data:image/jpg;base64,@p.photo">
+				</div>
+				<div class="col-sm-6">
+					<div class="jumbotron" style="margin-bottom: 0px;margin-left: 250px;width: 520px;text-align: center">
+		  				<label style="text-transform: uppercase;font-size: x-large;">@p.merchant</label>
+		  				<input class="rating" data-size="xxs" data-disabled="true" value=@p.rating>
+		  				<label style="font-size: large;">$@p.price</label>
+		  				<!-- <p>Quantity Available</p> -->
+		  				<div class="container">
+		  					<div class="row">
+		  						<div class="col-sm-4">
+		  							<div class="btn-group">
+		  								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; height: 32px; line-height:16px; margin-right: 0px;">Size Selection <span class="caret"></span></button>
+		  								<ul class="dropdown-menu" role="menu">
+		    								<li><a href="#">One Size</a></li>
+		    								<li class="divider"></li>
+		    								<li><a href="#">XS</a></li>
+		    								<li><a href="#">S</a></li>
+		    								<li><a href="#">M</a></li>
+		    								<li><a href="#">L</a></li>
+		    								<li><a href="#">XL</a></li>
+		    								<li><a href="#">XXL</a></li>
+		  								</ul>
+									</div>	
+		  						</div> 
+		  						<div class="col-sm-4">
+		  							<a class="btn btn-primary btn-md" href="#" role="button" style="
+		    							margin-left: 40px;" data-toggle="modal" data-target="#loginmodal">Buy Now!</a>
+		  						</div>
+		  					</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- <div class="row">
+				<div class="jumbotron" style="margin-top: 50px;height: 235.9999923706054px;width: 1185px;"">
+		  		<h1>Product Description</h1>
+		  		<p>This is a short description about the product</p>
+				</div> 
+			</div> -->
+		</div>
+		@footer()	
+		<script type="text/javascript">
+			window.onload = function() {
+	        	$("body").css("background-image", "url('assets/images/bg4.jpg')");
+			}
+		</script>
+    </body>
+</html>
