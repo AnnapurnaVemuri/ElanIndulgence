@@ -5,25 +5,25 @@
 		<a href="@routes.Application.loadMain()" role="button"
 			class="transparent logo">Elan Indulgence</a>
 		<div class="btn-group user">
-			<button type="button" class="btn user">Welcome @{user}</button>
+			<button type="button" class="btn user" style="font-family: fantasy">Welcome @{user}</button>
 			<button type="button" class="btn dropdown-toggle user"
 				data-toggle="dropdown" aria-expanded="false">
 				<span class="caret"></span> <span class="sr-only">Toggle
 					Dropdown</span>
 			</button>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="#" style="font-size: 10px;">DETAILS</a></li>
+				<li><a href="#" style="font-size: 10px;font-family: fantasy"  class="transparent" >DETAILS</a></li>
 				<li class="divider"></li>
 				<li><a href="#" role="button" class="transparent"
 					data-toggle="modal" data-target="#prefmodal"
-					style="font-size: 10px;">PREFERENCES</a></li>
+					style="font-size: 10px;font-family: fantasy">PREFERENCES</a></li>
 				<li class="divider"></li>
-				<li><a href="#" style="font-size: 10px;">ORDERS</a></li>
+				<li><a href="#" style="font-size: 10px;font-family: fantasy" class="transparent" >ORDERS</a></li>
 				<li class="divider"></li>
-				<li><a href="#" style="font-size: 10px;">RATINGS</a></li>
+				<li><a href="#" style="font-size: 10px;font-family: fantasy" class="transparent" >RATINGS</a></li>
 				<li class="divider"></li>
 				<li><a href="@routes.Application.loadMain()"
-					style="font-size: 10px;">LOGOUT</a></li>
+					style="font-size: 10px;font-family: fantasy" class="transparent" >LOGOUT</a></li>
 			</ul>
 		</div>
 	</div>
@@ -50,85 +50,85 @@
 				<div class="modal-body" id="pmodal">
 					<form id="prefForm" method="post" action="@routes.Application.saveUserPreferences()">
 						<div id="typePref" style="border-bottom: 1px solid #ccc">
-							<h3 style="text-align: center; padding-bottom: 10px">
+							<h3 style="text-align: center; padding-bottom: 10px;font-family: fantasy">
 								<span class="label label-primary">Product Preferences</span>
 							</h3>
 							<div class="container">
 								<div class="row">
-									<div  class="col-xs-2">
+									<div  class="col-xs-2" style="font-family: fantasy">
 										<label>
 											<span class="label label-primary">Women</span>
 										</label>
 										<div class="form-group">
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="1">SAREES
 											</label>
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="2">LEHENGAS
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="3">KURTIS
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="4">SALWAR KAMEEZ
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="5">DRESSES
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="6">JEWELLERY
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="7">BAGS
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="8">FOOTWEAR
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="9">SCARVES
 											</label>
 										</div>
 									</div>
-									<div  class="col-xs-2">
+									<div  class="col-xs-2" style="font-family: fantasy">
 										<label>
 											<span class="label label-primary">Men</span>
 										</label>
 										<div class="form-group">
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="10">SHERWANI
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="11">KURTAS
 											</label> 
-											<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+											<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 												<input type="checkbox" value="12">SUITS
 											</label>
 										</div>
 									</div>
 									<div  class="col-xs-4">
-										<div class="col-sm-offset-4">
+										<div class="col-sm-offset-4" style="font-family: fantasy">
 											<label><span class="label label-primary">Kids</span></label>
 										</div>
 										<div class="container">
 											<div class="row">
 												<div class="col-xs-2">
-													<div>
+													<div style="font-family: fantasy">
 														<label><span class="label label-primary">Girls</span></label>
 													</div>
 													<div class="form-group">
-														<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+														<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 															<input type="checkbox" value="13">ETHNIC WEAR
 														</label>
-														<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+														<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 															<input type="checkbox" value="14">DRESSES
 														</label>
 													</div>
 												</div>
 												<div class="col-xs-2">
-													<div>
+													<div style="font-family: fantasy">
 														<label><span class="label label-primary">Boys</span></label>
 													</div>
-													<label class="checkbox" style="font-size: 10px;font-weight: normal;">
+													<label class="checkbox" style="font-size: 10px;font-weight: normal;font-family: fantasy">
 														<input type="checkbox" value="15">ETHNIC WEAR
 													</label>
 												</div>
@@ -139,10 +139,10 @@
 							</div>
 						</div>
 						<div id="colorPref">
-							<h3 style="text-align: center; padding-bottom: 10px">
+							<h3 style="text-align: center; padding-bottom: 10px;font-family: fantasy">
 								<span class="label label-primary">Color Preferences</span>
 							</h3>
-							<div class="container-fluid form-group">
+							<div class="container-fluid form-group" style="font-family: fantasy">
 								<label class="checkbox-inline" style="font-size: 12px; color: red"> 
 									<input type="checkbox" value="16">RED
 								</label> 
