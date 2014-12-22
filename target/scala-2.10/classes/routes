@@ -1,0 +1,45 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.loadMain()
+
+# User registration
+POST	/register					controllers.Application.registerUser()
+
+# Login validation
+POST	/login						controllers.Application.loginValidation()
+
+# Go to user page
+GET		/user						controllers.Application.getUser(q:String, r:String)
+
+# Merchant registration
+POST	/merreg						controllers.Application.registerMerchant()
+
+# Merchant validation
+POST	/merval						controllers.Application.merchantValidation()
+
+# Add user preferences
+POST	/savepref					controllers.Application.saveUserPreferences()
+
+# Go to merchant page
+GET		/merchant					controllers.Application.getMerchant(u:String, p: Integer)
+
+# Get latest products
+GET		/newarrivals				controllers.RecoDB.getLatestProducts(p: Integer)
+
+# Load product details
+GET		/product					controllers.Application.loadProduct(p: String)
+
+# Get latest products for a user
+GET		/unewarr					controllers.RecoDB.getLatestProductsForUser(p: Integer, u: String)
+
+# Get product page for a user
+GET		/uproduct					controllers.Application.loadUserProduct(p: String, u: String)
+
+# Get products by product type filter
+GET		/prodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithoutColor(t: Integer, p: Integer)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

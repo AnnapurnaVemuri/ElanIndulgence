@@ -123,7 +123,7 @@ public class FilterDB extends Controller {
 				}
 			}
 		}
-		return ok(productlist.render(prodList));
+		return ok();
 	}
 
 	public static Result getProductByProdTypeAndRatingWithColor(int page_num,

@@ -115,7 +115,7 @@ public class Application extends Controller {
     	List<Integer> rating = new ArrayList<Integer>();
     	List<Product> prods = new ArrayList<Product>();
     	try {
-        	prods = FilterDB.getProductByCompleteWithoutColor(page_num, prodType, merchantList, color, price, rating);	
+        	//prods = FilterDB.getProductByCompleteWithoutColor(page_num, prodType, merchantList, color, price, rating);	
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
