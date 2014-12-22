@@ -1,0 +1,95 @@
+@(username : String, products : List[Product])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Elan Indulgence</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link href="@routes.Assets.at("stylesheets/star-rating.min.css")" media="all" rel="stylesheet" type="text/css" />
+        <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.map")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/star-rating.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
+    </head>
+    <script type="text/javascript">
+	    function getUrlParameter(sParam) {
+	        var sPageURL = window.location.search.substring(1);
+	        var sURLVariables = sPageURL.split('&');
+	        for (var i = 0; i < sURLVariables.length; i++) 
+	        {
+	            var sParameterName = sURLVariables[i].split('=');
+	            if (sParameterName[0] == sParam) 
+	            {
+	                return sParameterName[1];
+	            }
+	        }
+	    }
+    </script>
+    <body>
+    	@userheader(username, "FALSE")
+    	@usernav(username)
+		<div class="container" style="padding-left:0px">
+			<div class="row" style="padding-left:0px">
+				<div class="col-sm-3" style="padding-left:0px">
+					@filter()
+				</div>
+				<div class="col-sm-9">
+					<div class="container">
+				        <div class="row col-sm-9">
+							@for(product <- products) {
+								<div class="col-sm-4 thumb" style="text-align: center">
+					                <a class="thumbnail" href="#" style="width:260px" id=@product.prod_id>
+					                    <img class="img-responsive" src="data:image/jpg;base64,@product.photo" alt="renderedIncorrectly">
+					                </a>
+					                <label>@product.merchant</label>
+					                <input class="rating" data-size="xxs" data-disabled="true" value=@product.rating>
+					                <label>$@product.price</label>
+					            </div>
+					            <script>
+					            	var i = @product.prod_id;
+					            	$("#@product.prod_id").click(function() {
+					            		var url = window.location.href.split("/")[0];
+						        		window.location.href = url + "/uproduct?u=@username&p=" + @product.prod_id;
+					            	});
+					            </script>
+							}
+						</div>
+			    	</div>
+			    	<nav>
+					  <ul class="pager">
+					    <li id="olderEl" class="previous"><a href="#" id="older"><span aria-hidden="true">&larr;</span> Older</a></li>
+					    <li class="next"><a href="#" id="newer">Newer <span aria-hidden="true">&rarr;</span></a></li>
+					  </ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		@footer()
+		<script>
+	    	window.onload = function() {
+	    		var p = getUrlParameter("p");
+	    		if (p == 1) {
+	    			$("#olderEl").addClass("disabled");
+	    		}
+	    		
+	    		$("#older").click(function() {
+	        		var curr = parseInt(getUrlParameter("p")) - 1;
+	        		var url = window.location.href.split("?")[0];
+	        		window.location.href = url + "?u=@username&p=" + curr;
+	        	});
+	        	
+	        	$("#newer").click(function() {
+	        		var curr = parseInt(getUrlParameter("p")) + 1;
+	        		var url = window.location.href.split("?")[0];
+	        		window.location.href = url + "?u=@username&p=" + curr;
+	        	});
+	        	$("body").css("background-image", "url('assets/images/bg4.jpg')");
+	    	};
+		</script>
+    </body>
+</html>
