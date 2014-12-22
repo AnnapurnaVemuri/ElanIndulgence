@@ -320,7 +320,7 @@ public class RecoDB extends Controller {
 	}
 
 	
-	private static Result getLatestProducts(int page_num) throws Exception {
+	 public static Result getLatestProducts(int page_num) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
