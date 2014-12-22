@@ -79,14 +79,30 @@
 	    		
 	    		$("#older").click(function() {
 	        		var curr = parseInt(getUrlParameter("p")) - 1;
-	        		var url = window.location.href.split("?")[0];
-	        		window.location.href = url + "?p=" + curr;
+	        		var ampsplit = window.location.href.split("&p");
+	        		var url;
+	        		if (ampsplit.length > 1) {
+	        			url = ampsplit[0];
+	        			window.location.href = url + "&p=" + curr;
+	        		} else {
+	        			var quesplit = window.location.href.split("?p");
+	        			url = quesplit[0];
+	        			window.location.href = url + "?p=" + curr;
+	        		}
 	        	});
 	        	
 	        	$("#newer").click(function() {
 	        		var curr = parseInt(getUrlParameter("p")) + 1;
-	        		var url = window.location.href.split("?")[0];
-	        		window.location.href = url + "?p=" + curr;
+	        		var ampsplit = window.location.href.split("&p");
+	        		var url;
+	        		if (ampsplit.length > 1) {
+	        			url = ampsplit[0];
+	        			window.location.href = url + "&p=" + curr;
+	        		} else {
+	        			var quesplit = window.location.href.split("?p");
+	        			url = quesplit[0];
+	        			window.location.href = url + "?p=" + curr;
+	        		}
 	        	});
 	        	$("body").css("background-image", "url('assets/images/bg4.jpg')");
 	    	};
