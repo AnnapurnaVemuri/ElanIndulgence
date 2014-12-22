@@ -33,26 +33,42 @@
     <body>
     	@header()
     	@navigation()
-		<div class="container">
-	        <div class="row">
-				@for(product <- products) {
-					<div class="col-lg-4 col-md-3 col-xs-6 thumb" style="text-align: center">
-		                <a class="thumbnail" href="#" style="width:260px">
-		                    <img class="img-responsive" src="data:image/jpg;base64,@product.photo" alt="renderedIncorrectly">
-		                </a>
-		                <label>@product.merchant</label>
-		                <input class="rating" data-size="xxs" data-disabled="true" value=@product.rating>
-		                <label>@product.price</label>
-		            </div>
-				}
+		<div class="container" style="padding-left:0px">
+			<div class="row" style="padding-left:0px">
+				<div class="col-sm-3" style="padding-left:0px">
+					@filter()
+				</div>
+				<div class="col-sm-9">
+					<div class="container">
+				        <div class="row col-sm-9">
+							@for(product <- products) {
+								<div class="col-sm-4 thumb" style="text-align: center">
+					                <a class="thumbnail" href="#" style="width:260px" id=@product.prod_id>
+					                    <img class="img-responsive" src="data:image/jpg;base64,@product.photo" alt="renderedIncorrectly">
+					                </a>
+					                <label>@product.merchant</label>
+					                <input class="rating" data-size="xxs" data-disabled="true" value=@product.rating>
+					                <label>$@product.price</label>
+					            </div>
+					            <script>
+					            	var i = @product.prod_id;
+					            	$("#@product.prod_id").click(function() {
+					            		var url = window.location.href.split("/")[0];
+						        		window.location.href = url + "/product?p=" + @product.prod_id;
+					            	});
+					            </script>
+							}
+						</div>
+			    	</div>
+			    	<nav>
+					  <ul class="pager">
+					    <li id="olderEl" class="previous"><a href="#" id="older"><span aria-hidden="true">&larr;</span> Older</a></li>
+					    <li class="next"><a href="#" id="newer">Newer <span aria-hidden="true">&rarr;</span></a></li>
+					  </ul>
+					</nav>
+				</div>
 			</div>
-    	</div>
-    	<nav>
-		  <ul class="pager">
-		    <li id="olderEl" class="previous"><a href="#" id="older"><span aria-hidden="true">&larr;</span> Older</a></li>
-		    <li class="next"><a href="#" id="newer">Newer <span aria-hidden="true">&rarr;</span></a></li>
-		  </ul>
-		</nav>
+		</div>
 		@footer()
 		<script>
 	    	window.onload = function() {
