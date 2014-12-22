@@ -20,6 +20,10 @@ public class Application extends Controller {
         return ok(main.render("ElanIndulgence", ""));
     }
     
+    public static Result loadProduct() {
+        return ok(product.render());
+    }
+    
     public static Result registerUser() {
     	UserInfo info = Form.form(UserInfo.class).bindFromRequest().get();
     	info.save();
@@ -51,7 +55,7 @@ public class Application extends Controller {
 					return redirect(controllers.routes.Application.getUser(username, "FALSE"));
 				}
 			} else {
-				return redirect(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
+				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
