@@ -55,7 +55,7 @@ public class Application extends Controller {
 					return redirect(controllers.routes.Application.getUser(username, "FALSE"));
 				}
 			} else {
-				return redirect(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
+				return ok(main.render("ElanIndulgence", "Incorrect Username and Password Combination"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
