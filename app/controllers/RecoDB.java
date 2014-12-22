@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 import views.html.*;
 
 import org.apache.commons.codec.binary.Base64;
@@ -40,10 +41,20 @@ public class RecoDB extends Controller {
 	}
 
 	private static Result getProductByMerchantAndRating(int prod_type,
-			int merchant_type) throws Exception {
+			String merch) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
+		String merch_st="select merchant_id from merchant where name='"+merch+"'";		
+		statement = conn.createStatement();
+		rs = statement.executeQuery(merch_st);
+		 
+		rs.next();
+		int merchant_type=rs.getInt("merchant_id");
+
+		
+
+		
 		Connection connection = null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchantWithoutColor(prod_type1 integer,merchant_id1 integer ) "
 
@@ -180,10 +191,20 @@ public class RecoDB extends Controller {
 
 	
 	private static Result getProductByMerchantAndRatingWithColor(int prod_type,
-			int merchant_type, int color_id) throws Exception {
+			String merch, int color_id) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
+		
+		String merch_st="select merchant_id from merchant where name='"+merch+"'";		
+		statement = conn.createStatement();
+		rs = statement.executeQuery(merch_st);
+		 
+		rs.next();
+		int merchant_type=rs.getInt("merchant_id");
+
+
+		
 		Connection connection = null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchant(prod_type1 integer,merchant_id1 integer,color_id1 integer ) "
 
@@ -460,11 +481,11 @@ public class RecoDB extends Controller {
 
 	public static void main(String[] args) throws Exception {
 		RecoDB r = new RecoDB();
-		 RecoDB.getProductByRatingWithColor(1, 1);
-		 RecoDB.getProductByMerchantAndRatingWithColor(1, 6, 1);
+	//	 RecoDB.getProductByRatingWithColor(1, 1);
+		 RecoDB.getProductByMerchantAndRatingWithColor(1, "Bhaminee", 1);
 		//RecoDB.getLatestProducts(2);
-		RecoDB.getProductByMerchantAndRating(1,6);
-		RecoDB.getProductByRating(1);
+		RecoDB.getProductByMerchantAndRating(1,"Bhaminee");
+		//RecoDB.getProductByRating(1);
 	}
 
 }
