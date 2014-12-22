@@ -8,9 +8,6 @@ GET     /                           controllers.Application.loadMain()
 # User registration
 POST	/register					controllers.Application.registerUser()
 
-# Product
-GET		/product					controllers.Application.loadProduct()
-
 # Login validation
 POST	/login						controllers.Application.loginValidation()
 
@@ -30,7 +27,10 @@ POST	/savepref					controllers.Application.saveUserPreferences()
 GET		/merchant					controllers.Application.getMerchant(q:String)
 
 # Get latest products
-GET		/newarrivals				controllers.Application.getNewArrivals()
+GET		/newarrivals				controllers.RecoDB.getLatestProducts(p: Integer)
+
+# Load product details
+GET		/product					controllers.Application.loadProduct(p: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
