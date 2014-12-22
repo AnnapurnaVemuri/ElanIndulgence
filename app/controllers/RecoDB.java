@@ -44,10 +44,16 @@ public class RecoDB extends Controller {
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
-		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchant(prod_type1 integer,merchant_id1 integer,color_id1 integer ) returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin return query select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating,im.image as image from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id inner join images im on im.id=p.image_id where p.type_id=prod_type1 and  p.merchant_id=merchant_id1 and pc.color_id=color_id1 order by p.rating desc limit 6; end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
+		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchant(prod_type1 integer,merchant_id1 integer,color_id1 integer ) "
+
+				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
+				+ " return query select others.id,others.merchant_name,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
+				+ " from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id"
+				+ " where p.type_id=prod_type1 and  p.merchant_id=merchant_id1 and pc.color_id=color_id1 order by p.rating desc limit 6) as others on im.id=others.id;"
+				+ " end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
 		try {
 			connection = conn;
-			
+
 			statement = connection.createStatement();
 			statement.execute(stmt);
 			statement.close();
@@ -74,7 +80,6 @@ public class RecoDB extends Controller {
 			}
 
 			cstmt.close();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,16 +109,22 @@ public class RecoDB extends Controller {
 		return ok();
 	}
 
-	private static Result getProductByRating(int prod_type,
-			 int color_id) throws Exception {
+	private static Result getProductByRating(int prod_type, int color_id)
+			throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
-		String stmt = "CREATE OR REPLACE  FUNCTION RecoForProduct(prod_type1 integer,color_id1 integer ) returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin return query select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating,im.image as image from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id inner join images im on im.id=p.image_id where p.type_id=prod_type1 and  pc.color_id=color_id1 order by p.rating desc limit 12; end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
+		String stmt = "CREATE OR REPLACE  FUNCTION RecoForProduct(prod_type1 integer,color_id1 integer ) "
+
+				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
+				+ " return query select others.id,others.merchant_name,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
+				+ " from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id"
+				+ " where p.type_id=prod_type1 and pc.color_id=color_id1 order by p.rating desc limit 12) as others on im.id=others.id;"
+				+ " end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
 		try {
 			connection = conn;
-			
+
 			statement = connection.createStatement();
 			statement.execute(stmt);
 			statement.close();
@@ -139,7 +150,6 @@ public class RecoDB extends Controller {
 			}
 
 			cstmt.close();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,12 +179,19 @@ public class RecoDB extends Controller {
 		return ok();
 	}
 
-	private static Result getLatestProducts() throws Exception {
+	private static Result getLatestProducts(int page_num) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
-		String stmt = "CREATE OR REPLACE  FUNCTION NewArrivals() returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin return query select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating,im.image as image from products p inner join merchant m on p.merchant_id=m.merchant_id inner join images im on im.id=p.image_id  order by p.date_added desc limit 12; end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
+		int start=12*(page_num-1)+1,end=12*page_num;
+		String stmt = " CREATE OR REPLACE  FUNCTION NewArrivals()"
+				+ " returns TABLE (rn bigint,id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin"
+				+ " return query select * from( select row_number() over() as rn,others.id as id,others.merchant_name as merchant_name,others.price as price,others.rating as rating,im.image as image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
+				+ " from products p inner join merchant m on p.merchant_id=m.merchant_id"
+				+ " order by p.date_added desc limit "+12*page_num+") as others on im.id=others.id) as temp where temp.rn>="+start+" and temp.rn<="+end+";"
+				+ " end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10;";
+
 		try {
 			connection = conn;
 			statement = connection.createStatement();
@@ -202,7 +219,6 @@ public class RecoDB extends Controller {
 			}
 
 			cstmt.close();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -234,9 +250,9 @@ public class RecoDB extends Controller {
 
 	public static void main(String[] args) throws Exception {
 		RecoDB r = new RecoDB();
-		 //RecoDB.getProductByRating(1, 1);
-		// RecoDB.getProductByMerchantAndRating(1,6, 1);
-		RecoDB.getLatestProducts();
+		// RecoDB.getProductByRating(1, 1);
+		// RecoDB.getProductByMerchantAndRating(1, 6, 1);
+		RecoDB.getLatestProducts(2);
 	}
 
 }
