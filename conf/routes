@@ -8,6 +8,9 @@ GET     /                           controllers.Application.loadMain()
 # User registration
 POST	/register					controllers.Application.registerUser()
 
+# Product
+GET		/product					controllers.Application.loadProduct()
+
 # Login validation
 POST	/login						controllers.Application.loginValidation()
 

@@ -19,6 +19,10 @@ public class Application extends Controller {
         return ok(main.render("ElanIndulgence", ""));
     }
     
+    public static Result loadProduct() {
+        return ok(product.render());
+    }
+    
     public static Result registerUser() {
     	UserInfo info = Form.form(UserInfo.class).bindFromRequest().get();
     	info.save();
