@@ -31,5 +31,5 @@ public class OrderUI extends Model {
 	public String merchant_name;
 	public int qty;
 	public Date date_created;
-	String prod_type;
+	public String prod_type;
 }
