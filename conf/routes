@@ -24,7 +24,7 @@ POST	/merval						controllers.Application.merchantValidation()
 POST	/savepref					controllers.Application.saveUserPreferences()
 
 # Go to merchant page
-GET		/merchant					controllers.Application.getMerchant(q:String)
+GET		/merchant					controllers.Application.getMerchant(u:String, p: Integer)
 
 # Get latest products
 GET		/newarrivals				controllers.RecoDB.getLatestProducts(p: Integer)

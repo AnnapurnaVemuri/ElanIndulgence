@@ -138,9 +138,10 @@ public class FilterDB extends Controller {
 		public Integer end;
 	}
 
-	public static Result getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<Integer> merchant,
+	public static List<Product> getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<Integer> merchant,
 			List<Integer> color,List<Combo> price,List<Integer> rating)//, List<Integer> merchant, List<Combo> price,List<Integer> rating)
 			throws Exception {
+		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
@@ -238,7 +239,6 @@ public class FilterDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -276,7 +276,7 @@ public class FilterDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
 	}
 
 	public static Result getProductByForSideFilterWithColour(int page_num, List<Integer> prod_type,List<Integer> merchant,
