@@ -22,5 +22,6 @@ public class Product {
 	float rating;
 	String photo;
 	String merchant;
+	int qty;
 
 }
