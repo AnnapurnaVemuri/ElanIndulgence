@@ -125,3 +125,11 @@ label {
 	background-image:url('assets/images/bg1.img');
 	background-repeat: repeat-x;
 }
+
+.clear-rating {
+	visibility : hidden;
+}
+
+.caption {
+	visibility : hidden;
+}

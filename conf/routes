@@ -27,7 +27,7 @@ POST	/savepref					controllers.Application.saveUserPreferences()
 GET		/merchant					controllers.Application.getMerchant(q:String)
 
 # Get latest products
-GET		/newarrivals				controllers.Application.getNewArrivals()
+GET		/newarrivals				controllers.RecoDB.getLatestProducts(p: Integer)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

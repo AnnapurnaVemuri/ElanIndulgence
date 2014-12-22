@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import views.html.*;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -179,12 +180,12 @@ public class RecoDB extends Controller {
 		return ok();
 	}
 
-	private static Result getLatestProducts() throws Exception {
+	public static Result getLatestProducts(int pageno) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
-		
+		List<Product> products = new ArrayList<Product>();
 		String stmt = "CREATE OR REPLACE  FUNCTION NewArrivals() "
 
 				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
@@ -208,7 +209,6 @@ public class RecoDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -216,7 +216,7 @@ public class RecoDB extends Controller {
 						new String(Base64.encodeBase64(b)),
 						set.getString("merchant_name"));
 				System.out.println(i++ + product.toString());
-				prodList.add(product);
+				products.add(product);
 			}
 
 			cstmt.close();
@@ -246,14 +246,14 @@ public class RecoDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return ok(productlist.render(products));
 	}
 
 	public static void main(String[] args) throws Exception {
 		RecoDB r = new RecoDB();
 		//RecoDB.getProductByRating(1, 1);
 		//RecoDB.getProductByMerchantAndRating(1, 6, 1);
-		 RecoDB.getLatestProducts();
+		 RecoDB.getLatestProducts(1);
 	}
 
 }
