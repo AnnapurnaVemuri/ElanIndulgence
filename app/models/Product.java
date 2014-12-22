@@ -17,6 +17,8 @@ public class Product {
 				+ rating + ", merchant=" + merchant + ", photo=" + photo + "]";
 	}
 
+	public int qty;
+
 	public int prod_id;
 	public float price;
 	public float rating;
