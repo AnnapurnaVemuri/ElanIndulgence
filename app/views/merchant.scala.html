@@ -1,4 +1,4 @@
-@(username : String, products : List[Product])
+@(username : String, products : List[Product], orders : List[CustomizedOrders])
 <!DOCTYPE html>
 
 <html>
@@ -94,10 +94,8 @@
 					</div>
 					<div class="col-sm-3" style="padding-left:40px;">
 						<div class="btn-group-vertical" role="group">
-							<button class="btn btn-default login" style="margin:3px"> View Orders </button>
+							<a href="#" data-toggle="modal" data-target="#merordermodal" style="margin:3px" class="btn btn-default login">View Orders</a>
 				 	 		<button id="popup" class="btn btn-default login" onclick="div_show()" style="margin:3px;">Upload Pictures</button>
-				  			<!-- <button type="button" class="btn btn-default" style="background-color: #6D9BC3 !important"><input type="file" data-filename-placement="inside"></button> -->
-				  	
 				  			<!-- NewsTicker Implementation -->
 				  			<div id="wrap" style="border-radius: 5px;border: 1px solid #ccc;margin: 3px; margin-right: 0px;">
 								<div id="head" class="block">
@@ -116,6 +114,21 @@
 								</div>
 							</div>
 				  		</div>
+					</div>
+					<div id="merordermodal" class="modal fade in" role="dialog"
+						aria-labelledby="merModal">
+						<div class="modal-dialog" style="width: 800px; margin-top: 50px;">
+							<div class="modal-content" style="height: 600px">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-hidden="true">&times;</button>
+									<h3 class="loginh3" style="font-family: fantasy;font-weight: bold">Welcome @{username}, Your orders</h3>
+								</div>
+								<div class="modal-body" id="omodal">
+									@merchantorder(orders, false)
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

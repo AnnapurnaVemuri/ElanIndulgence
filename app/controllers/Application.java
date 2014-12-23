@@ -1,5 +1,6 @@
 package controllers;
 
+import models.CustomOrderMessages;
 import models.CustomizedOrders;
 import models.Merchant;
 import models.Product;
@@ -16,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.avaje.ebean.ExpressionList;
@@ -40,7 +42,16 @@ public class Application extends Controller {
     }
     
     public static Result getUser(String username, String newReq) {
-    	return ok(user.render(username, newReq, "FALSE", null));
+    	List<CustomizedOrders> allorder = CustomizedOrders.findInvolving(username);
+    	for (CustomizedOrders order: allorder) {
+    		List<CustomOrderMessages> messages = CustomOrderMessages.findByID(order.id);
+    		if (messages != null) {
+	    		for (CustomOrderMessages message : messages) {
+	    			order.messages.add(message);
+	    		}
+    		}
+    	}
+    	return ok(user.render(username, newReq, "FALSE", allorder));
     }
     
     public static Result addCustomOrder() {
@@ -62,12 +73,28 @@ public class Application extends Controller {
     	order.colorsList = builder.toString();
     	System.out.println(order.colorsList);
     	order.save();
-    	return redirect(controllers.routes.Application.getAllOrdersOfUser(order.custusername));
+    	List<CustomizedOrders> allorder = CustomizedOrders.findInvolving(order.custusername);
+    	for (CustomizedOrders order1: allorder) {
+    		List<CustomOrderMessages> messages = CustomOrderMessages.findByID(order.id);
+    		if (messages != null) {
+	    		for (CustomOrderMessages message : messages) {
+	    			order1.messages.add(message);
+	    		}
+    		}
+    	}
+    	return ok(user.render(order.custusername, "FALSE", "TRUE", allorder));
     }
     
     public static Result getAllOrdersOfUser(String username) {
-    	CustomizedOrders orders = new CustomizedOrders();
     	List<CustomizedOrders> allorder = CustomizedOrders.findInvolving(username);
+    	for (CustomizedOrders order: allorder) {
+    		List<CustomOrderMessages> messages = CustomOrderMessages.findByID(order.id);
+    		if (messages != null) {
+	    		for (CustomOrderMessages message : messages) {
+	    			order.messages.add(message);
+	    		}
+    		}
+    	}
     	return ok(user.render(username, "FALSE", "TRUE", allorder));
     }
     
@@ -151,6 +178,7 @@ public class Application extends Controller {
 		}
     	return ok(productlist.render(prods));
     }
+    
     public static Result getMerchant(String user, int page_num) {
     	List<Integer> merchantList = new ArrayList<Integer>();
     	merchantList.add(1);
@@ -163,7 +191,46 @@ public class Application extends Controller {
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
-    	return ok(merchant.render(user, prods));
+    	List<Merchant> merchants = Merchant.findInvolving(user);
+    	System.out.println("For merchant username=" + user);
+    	System.out.println("got matches:" + merchants.size());
+    	List<CustomizedOrders> allorder = null;
+    	
+    	if (merchants.size() > 0) {
+    		Merchant merchant = merchants.get(0);
+        	System.out.println("got merchant with name:"+ merchant.name);
+    		allorder = CustomizedOrders.findUsingMerchantName(merchant.name);
+    		for (CustomizedOrders order: allorder) {
+        		List<CustomOrderMessages> messages = CustomOrderMessages.findByID(order.id);
+        		if (messages != null) {
+    	    		for (CustomOrderMessages message : messages) {
+    	    			order.messages.add(message);
+    	    		}
+        		}
+        	}
+    	}
+    	return ok(merchant.render(user, prods, allorder));
+    }
+    
+    public static Result addMessageToOrder() {
+    	CustomOrderMessages info = Form.form(CustomOrderMessages.class).bindFromRequest().get();
+    	info.date_created = new Date();
+    	info.save();
+    	List<CustomizedOrders> orders = CustomizedOrders.findUsingId(info.order_id);
+    	CustomizedOrders order = new CustomizedOrders();
+    	if (orders.size() > 0) {
+    		order = orders.get(0);
+    	}
+    	if (info.fromCust) {
+    		return getAllOrdersOfUser(order.custusername);
+    	} else {
+    		List<Merchant> merchants = Merchant.findUsingName(order.merchantname);
+    		Merchant m = new Merchant();
+    		if (merchants.size() > 0) {
+    			m = merchants.get(0);
+    		}
+    		return redirect(controllers.routes.Application.getMerchant(m.username, 1));
+    	}
     }
     
     private static Result checkMerchantExist(String username, String password, boolean isRegister) {

@@ -1,4 +1,4 @@
-@(orders: List[CustomizedOrders])
+@(orders: List[CustomizedOrders], fromCust: Boolean)
 
 <div role="tabpanel">
 
@@ -6,7 +6,7 @@
   <ul class="nav nav-tabs" role="tablist">
 	  @if(orders != null) {
 	  	@for(order <- orders) {
-	  		<li role="presentation" class="active"><a href="#@order.id" aria-controls="home" role="tab" data-toggle="tab">Order #@order.id</a></li>
+	  		<li role="presentation"><a href="#@order.id" aria-controls="home" role="tab" data-toggle="tab"><label>Order #@order.id</label></a></li>
 		}
 	  }
   </ul>
@@ -14,14 +14,54 @@
   <div class="tab-content">
   	@if(orders != null) {
   		@for(order <- orders) {
-	  		<div role="tabpanel" class="tab-pane active" id=@order.id>
-	  			<label> Order Id: @order.id</label>
-	  			<label> Customer name: @order.custusername</label>
-	  			<label> Merchant name: @order.merchantname</label>
-	  			<label> Product ordered: @order.prodtype</label>
-	  			<label> Colors Preferred: @order.colorsList</label>
-	  			<label> Budget Range: @order.budgetrange</label>
-	  			<label> Description: @order.description</label>
+	  		<div role="tabpanel" class="tab-pane" id=@order.id>
+	  			<div style="text-align:center"><label><strong> Customer name:</strong> @order.custusername</label></div>
+	  			<div style="text-align:center"><label><strong> Merchant name:</strong> @order.merchantname</label></div>
+	  			<div style="text-align:center"><label><strong> Product ordered:</strong> @order.prodtype</label></div>
+	  			<div style="text-align:center"><label><strong> Colors Preferred:</strong> @order.colorsList</label></div>
+	  			<div style="text-align:center"><label><strong> Budget Range:</strong> @order.budgetrange</label></div>
+	  			<div style="text-align:center"><label><strong> Description:</strong> @order.description</label></div>
+	  			<div class="pre-scrollable" style="height:125px;border: 1px solid #628baf; border-radius: 3px; text-align: center;width: 650px;margin-left: 50px;">
+	  				<label style="font-weight: bold; font-size: 14px; text-decoration: underline;"> MESSAGE HISTORY</label>
+	  				<div>
+			  			@for(msg <- order.messages) {
+			  				@msg.fromCust match {
+			  					case true => {
+			  							<label style="text-decoration: underline;">@order.custusername :</label>
+			  						}
+			  					case false => {
+			  							<label style="text-decoration: underline;">@order.merchantname :</label>
+			  						}
+			  				}
+			  				<label>@msg.message - @msg.date_created</label>
+			  			}
+		  			</div>	
+		  		</div>
+		  		<form class="form-horizontal" method="post" action="@routes.Application.addMessageToOrder()" style="padding-top:20px">
+		  				<div class="form-group hide">
+							<label for="order_id" class="col-sm-3 control-label">Order id</label>
+							<div class="col-sm-8">
+								<input type="text" name="order_id" class="form-control" value=@order.id>
+							</div>
+						</div>
+						<div class="form-group hide">
+							<label for="fromCust" class="col-sm-3 control-label">From customer</label>
+							<div class="col-sm-8">
+								<input type="text" name="fromCust" class="form-control" value=@fromCust>
+							</div>
+						</div>
+						<div class="form-group" class="col-sm-3 control-label">
+							<label for="message"  class="col-sm-3 control-label">Enter Message:</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" rows="3" id="message" name="message"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+				        	<div class="col-sm-10 col-sm-offset-5">
+				                <button type="submit" class="btn btn-default prefSave" style="width:125px">Send Message</button>
+				            </div>
+				        </div>
+		  			</form>
 	  		</div>
 	  	}
   	}
