@@ -205,9 +205,9 @@ public class FilterDB extends Controller {
 				+ " as rating from products p inner join merchant m on p.merchant_id=m.merchant_id"
 				+ " inner join product_color pc on p.id=pc.product_id where p.type_id="
 				+ prod_type
-				+ " and pc.color_id IN"
+				+ " and pc.color_id IN("
 				+ ctype
-				+ " order by p.rating desc limit "
+				+ ") order by p.rating desc limit "
 				+ 12
 				* page_num
 				+ ") as others on im.id=others.pid order by others.rating desc)"
