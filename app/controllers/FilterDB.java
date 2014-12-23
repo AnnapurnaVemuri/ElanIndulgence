@@ -39,8 +39,8 @@ public class FilterDB extends Controller {
 		return conn;
 	}
 
-	public static Result getProductByProdTypeAndRatingWithoutColor(int prod_type,
-			int page_num) throws Exception {
+	public static Result getProductByProdTypeAndRatingWithoutColor(
+			int prod_type, int page_num) throws Exception {
 		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
 		Statement statement = null;
@@ -126,13 +126,72 @@ public class FilterDB extends Controller {
 		return ok();
 	}
 
+	public static Result getProductByProdTypeAndRatingWithUserName(
+			int page_num, int prod_type, String username) throws Exception {
+
+		Connection conn = initializeConnection();
+		String stmt = "select color_id from user_prefs where user_name='"
+				+ username + "'";
+		Statement statement = null;
+		ResultSet rs = null;
+
+		statement = conn.createStatement();
+		rs = statement.executeQuery(stmt);
+		List<Integer> list = new ArrayList<Integer>();
+		while (rs.next()) {
+			list.add(rs.getInt("color_id"));
+		}
+		if (list.size() > 0) {
+			getProductByProdTypeAndRatingWithoutColor(prod_type, page_num);
+		} else {
+			getProductByProdTypeAndRatingWithColor(page_num, prod_type, list);
+		}
+		return ok();
+
+	}
+
+	public static Result getProductByMerchTypeAndRatingWithUserName(
+			int page_num, String merch, String username) throws Exception {
+
+		Connection conn = initializeConnection();
+		String stmt = "select color_id from user_prefs where user_name='"
+				+ username + "'";
+		Statement statement = null;
+		ResultSet rs = null;
+
+		statement = conn.createStatement();
+		rs = statement.executeQuery(stmt);
+		List<Integer> list = new ArrayList<Integer>();
+		while (rs.next()) {
+			list.add(rs.getInt("color_id"));
+		}
+		List<String> merchant = new ArrayList<String>();
+		merchant.add(merch);
+		List<Integer> dummy=new ArrayList<Integer>();
+		List<Combo> dummyc=new ArrayList<Combo>();
+		if (list.size() == 0) {
+			getProductByCompleteWithoutColor(page_num, dummy, merchant, dummyc,
+					dummy);
+		} else {
+			getProductByForSideFilterWithColour(page_num, dummy, merchant,list,
+					dummyc,dummy);
+		}
+		return ok();
+
+	}
+
 	public static Result getProductByProdTypeAndRatingWithColor(int page_num,
-			int prod_type, int color_id) throws Exception {
+			int prod_type, List<Integer> color) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
 		int start = 12 * (page_num - 1) + 1, end = 12 * page_num;
+
+		String ctype = "";
+		ctype += color.get(0);
+		for (int i = 1; i < color.size(); i++)
+			ctype += "," + color.get(i);
 
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoByProdType(prod_type1 integer,color_id1 integer ) "
 
@@ -146,8 +205,8 @@ public class FilterDB extends Controller {
 				+ " as rating from products p inner join merchant m on p.merchant_id=m.merchant_id"
 				+ " inner join product_color pc on p.id=pc.product_id where p.type_id="
 				+ prod_type
-				+ " and pc.color_id="
-				+ color_id
+				+ " and pc.color_id IN"
+				+ ctype
 				+ " order by p.rating desc limit "
 				+ 12
 				* page_num
@@ -170,7 +229,7 @@ public class FilterDB extends Controller {
 					.prepareCall("{call  RecoByProdType(?,?)}");
 
 			cstmt.setInt(1, prod_type); // The name argument is the second ?
-			cstmt.setInt(2, color_id); // The name argument is the second ?
+			cstmt.setInt(2, 0); // The name argument is the second ?
 			cstmt.execute();
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
@@ -227,8 +286,10 @@ public class FilterDB extends Controller {
 		public Integer end;
 	}
 
-	public static List<Product> getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<Integer> merchant,
-			List<Combo> price,List<Integer> rating)//, List<Integer> merchant, List<Combo> price,List<Integer> rating)
+	public static List<Product> getProductByCompleteWithoutColor(int page_num,
+			List<Integer> prod_type, List<String> merch, List<Combo> price,
+			List<Integer> rating)// , List<Integer> merchant, List<Combo>
+									// price,List<Integer> rating)
 			throws Exception {
 		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
@@ -237,7 +298,18 @@ public class FilterDB extends Controller {
 		Connection connection = null;
 		int start = 12 * (page_num - 1) + 1, end = 12 * page_num;
 		boolean where = false;
+		List<Integer> merchant = new ArrayList<Integer>();
+		for (String m : merch) {
+			String merch_st = "select merchant_id from merchant where name='"
+					+ m + "'";
+			statement = conn.createStatement();
+			rs = statement.executeQuery(merch_st);
 
+			while (rs.next()) {
+				merchant.add(rs.getInt("merchant_id"));
+
+			}
+		}
 		String ptype = "";
 		if (prod_type.size() > 0) {
 			where = true;
@@ -466,9 +538,9 @@ public class FilterDB extends Controller {
 
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoBy(prod_type1 integer,color_id1 integer ) "
 
-				+ " returns TABLE ( rn bigint,id integer,merchant_name character varying(255),ptype integer,price double precision,rating double precision,image bytea)  as $$ begin "
+				+ " returns TABLE ( rn bigint,id integer,color_id integer,merchant_name character varying(255),ptype integer,price double precision,rating double precision,image bytea)  as $$ begin "
 				+ " return query "
-				+ "select * from (select row_number() over() rn,others.id,others.merchant_name,others.ptype,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating,p.type_id as ptype"
+				+ "select * from (select row_number() over() rn,others.id,others.color_id,others.merchant_name,others.ptype,others.price,others.rating,im.image from images im inner join (select p.id as id,pc.color_id as color_id,m.name as merchant_name,p.price as price,p.rating as rating,p.type_id as ptype"
 				+ "	from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id"
 				+ (where ? "	where " : "")
 				+ ptype
@@ -483,7 +555,7 @@ public class FilterDB extends Controller {
 				+ start
 				+ " and temp.rn<="
 				+ end
-				+ ";; end;"
+				+ "; end;"
 				+ " $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
 		System.out.println(stmt);
 		// where temp.rn>=1 and temp.rn<=8;
@@ -510,7 +582,7 @@ public class FilterDB extends Controller {
 						set.getFloat("price"), set.getFloat("rating"),
 						new String(Base64.encodeBase64(b)),
 						set.getString("merchant_name"));
-				System.out.println(i++ + product.toString());
+				System.out.println(i++ + product.toString()+" "+set.getString("color_id"));
 				prodList.add(product);
 			}
 
@@ -545,13 +617,7 @@ public class FilterDB extends Controller {
 	}
 
 	public static void main(String[] args) throws Exception {
-		//FilterDB.getProductByProdTypeAndRatingWithoutColor(1, 1);
-		//FilterDB.getProductByProdTypeAndRatingWithoutColor(2, 1);
-		/*
-		 * FilterDB.getProductByProdTypeAndRating(1, 1, 1);
-		 * FilterDB.getProductByProdTypeAndRating(2, 1, 1);
-		 * FilterDB.getProductByProdTypeAndRating(3, 1, 1);
-		 */
+	
 		List<Integer> ptype = new ArrayList<Integer>();
 		// ptype.add(1);
 		// ptype.add(2);
@@ -570,10 +636,8 @@ public class FilterDB extends Controller {
 		List<Integer> rtype = new ArrayList<Integer>();
 		// rtype.add(0);
 		// rtype.add(1);
-		// FilterDB.getProductByForSideFilterWithColour(1,ptype,mtype,ctype,combo,rtype);
-		FilterDB.getProductByCompleteWithoutColor(1, ptype, mtype, combo, rtype);
-		FilterDB.getProductByCompleteWithoutColor(2, ptype, mtype, combo, rtype);
-		// FilterDB.getProductByProdTypeAndRatingWithoutColor(1, 1);
-	}
+		//FilterDB.getProductByMerchTypeAndRatingWithUserName(1, "Bhaminee","sowmya1");
+		FilterDB.getProductByProdTypeAndRatingWithUserName(1, 1, "sowmya");
 
+}
 }
