@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m:: delivering :: elanindulgence#elanindulgence_2.10;1.0-SNAPSHOT :: 1.0-SNAPSHOT :: integration :: Sat Dec 20 21:35:44 EST 2014[0m
+[0m[[0mdebug[0m] [0m	options = status=integration pubdate=Sat Dec 20 21:35:44 EST 2014 validate=true resolveDynamicRevisions=true merge=true resolveId=null pubBranch=null[0m
+[0m[[0minfo[0m] [0m	delivering ivy file to /home/sowmya/git/ElanIndulgence/target/scala-2.10/ivy-1.0-SNAPSHOT.xml[0m
+[0m[[0mdebug[0m] [0m	deliver done (82ms)[0m
