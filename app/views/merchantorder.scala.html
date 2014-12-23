@@ -16,10 +16,21 @@
   			<label> Customer name: @order.cust_id</label>
   			<label> Description: @order.descr</label>
   			<div class="pre-scrollable">
-  				
+  				@for(msg <- order.messages) {
+	  					@msg.fromCust match {
+	  						case true => {
+	  							<label>@order.cust_id :
+	  						}
+	  						case false => {
+	  							<label>@order.merchant_id :
+	  						}
+	  					}
+	  					@msg.message - @msg.date_created</label>
+	  			}
+	  			<textarea id="msgarea" rows="5" cols="10"></textarea>
+	  			<button id="sendMsg"></button>
   			</div>
   		</div>
   	}
   </div>
-
 </div>

@@ -1,5 +1,6 @@
 package controllers;
 
+import models.CustomizedOrders;
 import models.Merchant;
 import models.Product;
 import models.UserInfo;
@@ -38,6 +39,28 @@ public class Application extends Controller {
     
     public static Result getUser(String username, String newReq) {
     	return ok(user.render(username, newReq));
+    }
+    
+    public static Result addCustomOrder() {
+    	System.out.println("Got custom order");
+    	CustomizedOrders order = Form.form(CustomizedOrders.class).bindFromRequest().get();
+    	System.out.println(order.custusername);
+    	System.out.println(order.merchantname);
+    	System.out.println(order.budgetrange);
+    	System.out.println(order.description);
+    	System.out.println(order.prodtype);
+    	System.out.println(order.prefcolors);
+    	StringBuilder builder = new StringBuilder();
+    	for (int i = 0; i < order.prefcolors.size(); i++) {
+    		if(order.prefcolors.get(i) != null) {
+        		builder.append(order.prefcolors.get(i));
+        		builder.append(",");
+    		}
+    	}
+    	order.colorsList = builder.toString();
+    	System.out.println(order.colorsList);
+    	order.save();
+    	return ok(user.render(order.custusername, "FALSE"));
     }
     
     private static Result checkUserExist(String username, String password, boolean isRegister) {
