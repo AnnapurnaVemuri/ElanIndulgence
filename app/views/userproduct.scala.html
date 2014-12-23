@@ -1,4 +1,4 @@
-@(u:String, p : Product)
+@(u:String, p : Product,finallist : List[Product])
 
 <!DOCTYPE html>
 
@@ -19,7 +19,7 @@
     <body>
     	@userheader(u, "FALSE", "FALSE", null)
     	@usernav(u)
-    	@recom()
+    	@recom(finallist)
     	<div class="container">
 			<div class="row">
 				<div class="col-sm-6" style="width: 400px;">
