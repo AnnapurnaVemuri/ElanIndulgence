@@ -1,4 +1,4 @@
-@(products : List[Product])
+@(products : List[Product],reco : List[Product])
 
 <!DOCTYPE html>
 
@@ -33,7 +33,7 @@
     <body>
     	@header()
     	@navigation()
-    	
+ 	@recom(reco)
 		<div class="container" style="padding-left:0px">
 			<div class="row" style="padding-left:0px">
 				<div class="col-sm-3" style="padding-left:0px">
