@@ -171,22 +171,27 @@ public class Application extends Controller {
     	List<Combo> price = new ArrayList<Combo>();
     	List<Integer> rating = new ArrayList<Integer>();
     	List<Product> prods = new ArrayList<Product>();
+    	List<Product> recos = new ArrayList<Product>();
     	try {
 			prods = FilterDB.getAllProductsWithoutColor(page_num, prodType, merchantList, price, rating);
+			recos=RecoDB.getLatestProductsList(page_num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return ok(productlist.render(prods));
+    	return ok(productlist.render(prods,recos));
     }
     
     public static Result getProductsOfMerchantWithUname(int merchant_id,String uname, int page_num) {
     	List<Product> prods = new ArrayList<Product>();
+    	List<Product> recos = new ArrayList<Product>();
     	try {
 			prods = FilterDB.getProductByMerchIDAndRatingWithUserName(page_num, merchant_id,uname);
+			recos=RecoDB.getLatestProductsForUserList(page_num, uname);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return ok(userproductlist.render(uname, prods));
+
+    	return ok(userproductlist.render(uname,prods,recos));
     }
     
     
@@ -310,4 +315,24 @@ public class Application extends Controller {
     	List<Product> finlist=RecoDB.getCombinedRecoWithUserName(u,prod2.prod_type,prod2.merchant);
     	return ok(userproduct.render(u, prod,finlist));
     }
+    
+    public static Result loadProductTypeDetails(int type,int page_num) throws Exception {
+    
+    	Connection connection = DB.getConnection();
+    	List<Product> prods=FilterDBReturnList.getProductByProdTypeAndRatingWithoutColor(type,page_num);
+    	List<Product> reco=RecoDB.getProductByProdTypeAndRatingWithUserName(type,"");
+    	
+    	return ok(productlist.render(prods,reco));
+    }
+    
+    public static Result loadProductTypeDetailsWithUser(int type,String u,int page_num) throws Exception {
+    	
+    	Connection connection = DB.getConnection();
+    	List<Product> prods=FilterDB.getProductByProdTypeAndRatingWithUserName( type,u,page_num);
+    	List<Product> reco=RecoDB.getProductByProdTypeAndRatingWithUserName(type,u);
+    	
+    	return ok(userproductlist.render(u,prods,reco));
+    }
+    
+    
 }

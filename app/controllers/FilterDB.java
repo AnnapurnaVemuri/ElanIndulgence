@@ -40,7 +40,7 @@ public class FilterDB extends Controller {
 		return conn;
 	}
 
-	public static Result getProductByProdTypeAndRatingWithoutColor(
+	/*public static Result getProductByProdTypeAndRatingWithoutColor(
 			int prod_type, int page_num) throws Exception {
 		List<Product> prodList = new ArrayList<Product>();
 		Connection conn = initializeConnection();
@@ -126,8 +126,8 @@ public class FilterDB extends Controller {
 		}
 		return ok(productlist.render(prodList));
 	}
-	
-	public static Result getProductByProdTypeAndRatingWithUserName(
+*/	
+	public static List<Product> getProductByProdTypeAndRatingWithUserName(
 		 int prod_type, String username,	int page_num) throws Exception {
 
 		Connection conn = initializeConnection();
@@ -148,7 +148,7 @@ public class FilterDB extends Controller {
 		} else {
 			rlist=FilterDBReturnList.getProductByProdTypeAndRatingWithColor(page_num, prod_type, list);
 		}
-		return ok( userproductlist.render(username,rlist));
+		return rlist;
 
 	}
 
