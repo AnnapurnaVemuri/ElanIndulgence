@@ -18,6 +18,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.avaje.ebean.ExpressionList;
+
 import controllers.FilterDB.Combo;
 
 public class Application extends Controller {
@@ -38,7 +40,7 @@ public class Application extends Controller {
     }
     
     public static Result getUser(String username, String newReq) {
-    	return ok(user.render(username, newReq));
+    	return ok(user.render(username, newReq, "FALSE", null));
     }
     
     public static Result addCustomOrder() {
@@ -60,7 +62,13 @@ public class Application extends Controller {
     	order.colorsList = builder.toString();
     	System.out.println(order.colorsList);
     	order.save();
-    	return ok(user.render(order.custusername, "FALSE"));
+    	return redirect(controllers.routes.Application.getAllOrdersOfUser(order.custusername));
+    }
+    
+    public static Result getAllOrdersOfUser(String username) {
+    	CustomizedOrders orders = new CustomizedOrders();
+    	List<CustomizedOrders> allorder = CustomizedOrders.findInvolving(username);
+    	return ok(user.render(username, "FALSE", "TRUE", allorder));
     }
     
     private static Result checkUserExist(String username, String password, boolean isRegister) {
@@ -137,7 +145,7 @@ public class Application extends Controller {
     	List<Integer> rating = new ArrayList<Integer>();
     	List<Product> prods = new ArrayList<Product>();
     	try {
-			prods = FilterDB.getProductByCompleteWithoutColor(page_num, prodType, merchantList, price, rating);
+			prods = FilterDB.getAllProductsWithoutColor(page_num, prodType, merchantList, price, rating);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,7 +159,7 @@ public class Application extends Controller {
     	List<Integer> rating = new ArrayList<Integer>();
     	List<Product> prods = new ArrayList<Product>();
     	try {
-        	prods = FilterDB.getProductByCompleteWithoutColor(page_num, prodType, merchantList, price, rating);	
+        	prods = FilterDB.getAllProductsWithoutColor(page_num, prodType, merchantList, price, rating);	
     	} catch (Exception e) {
     		e.printStackTrace();
     	}

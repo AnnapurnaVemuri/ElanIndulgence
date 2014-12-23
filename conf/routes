@@ -47,5 +47,8 @@ GET		/merchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: I
 # Add custom order
 POST	/custorder					controllers.Application.addCustomOrder()
 
+# Get all customer orders
+GET		/userorder					controllers.Application.getAllOrdersOfUser(u: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

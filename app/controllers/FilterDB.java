@@ -123,7 +123,7 @@ public class FilterDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return ok(productlist.render(prodList));
 	}
 
 	public static Result getProductByProdTypeAndRatingWithUserName(
@@ -285,6 +285,151 @@ public class FilterDB extends Controller {
 		public Integer begin;
 		public Integer end;
 	}
+	
+	public static List<Product> getAllProductsWithoutColor(int page_num,
+			List<Integer> prod_type, List<Integer> merchant, List<Combo> price,
+			List<Integer> rating)// , List<Integer> merchant, List<Combo>
+									// price,List<Integer> rating)
+			throws Exception {
+		List<Product> prodList = new ArrayList<Product>();
+		Connection conn = initializeConnection();
+		Statement statement = null;
+		ResultSet rs = null;
+		Connection connection = null;
+		int start = 12 * (page_num - 1) + 1, end = 12 * page_num;
+		boolean where = false;
+		String ptype = "";
+		if (prod_type.size() > 0) {
+			where = true;
+			ptype += prod_type.get(0);
+			for (int i = 1; i < prod_type.size(); i++)
+				ptype += "," + prod_type.get(i);
+			ptype += ")";
+		}
+		if (!ptype.equals(""))
+			ptype = " p.type_id IN (" + ptype;
+		String mtype = "";
+		if (merchant.size() > 0) {
+			where = true;
+			mtype += merchant.get(0);
+			for (int i = 1; i < merchant.size(); i++)
+				mtype += "," + merchant.get(i);
+			mtype += ")";
+		}
+		if (!mtype.equals(""))
+			mtype = " p.merchant_id IN (" + mtype;
+		if (!ptype.equals("") && !mtype.equals(""))
+			mtype = " and" + mtype;
+
+		String priceq = "";
+		if (price.size() > 0) {
+			where = true;
+			priceq += " (p.price BETWEEN " + price.get(0).begin + " AND "
+					+ price.get(0).end + ")";
+		}
+		for (int i = 1; i < price.size(); i++) {
+			priceq += " or ";
+			priceq += " (p.price BETWEEN " + price.get(i).begin + " AND "
+					+ price.get(i).end + ")";
+		}
+		if (!priceq.equals(""))
+			priceq = "(" + priceq + ")";
+		if (!mtype.equals("") && !priceq.equals(""))
+			priceq = " and" + priceq;
+		System.out.println(priceq);
+		String ratingq = "";
+		if (rating.size() > 0) {
+			where = true;
+			ratingq += "(p.rating >= " + rating.get(0) + ")";
+		}
+		for (int i = 1; i < rating.size(); i++) {
+			ratingq += " or ";
+			ratingq += "(p.rating >=" + rating.get(i) + ")";
+		}
+		if (!ratingq.equals(""))
+			ratingq = "(" + ratingq + ")";
+		if (!priceq.equals("") && !ratingq.equals(""))
+			ratingq = " and" + ratingq;
+		System.out.println(ratingq);
+
+		String stmt = "CREATE OR REPLACE  FUNCTION RecoByWOC(prod_type1 integer) "
+
+				+ " returns TABLE ( rn bigint,id integer,merchant_name character varying(255),ptype integer,price double precision,rating double precision,image bytea)  as $$ begin "
+				+ " return query "
+				+ "select * from (select row_number() over() rn,others.id,others.merchant_name,others.ptype,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating,p.type_id as ptype"
+				+ "	from products p inner join merchant m on p.merchant_id=m.merchant_id "
+				+ (where ? "	where " : "")
+				+ ptype
+				+ mtype
+				+ priceq
+				+ ratingq
+				+ " order by p.rating desc limit "
+				+ 12
+				* page_num
+				+ " ) as others on im.id=others.id) as temp where temp.rn>="
+				+ start
+				+ " and temp.rn<=+"
+				+ end
+				+ "; end;"
+				+ " $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
+		System.out.println(stmt);
+		//
+		try {
+			connection = conn;
+
+			statement = connection.createStatement();
+			statement.execute(stmt);
+			statement.close();
+
+			PreparedStatement cstmt = connection
+					.prepareCall("{call  RecoByWOC(?)}");
+
+			cstmt.setInt(1, 1); // The name argument is the second ?
+
+			cstmt.execute();
+
+			ResultSet set = ((ResultSet) cstmt.getResultSet());
+			int i = 1;
+			while (set.next()) {
+				byte[] b = set.getBytes("image");
+				Product product = new Product(set.getInt("id"),
+						set.getFloat("price"), set.getFloat("rating"),
+						new String(Base64.encodeBase64(b)),
+						set.getString("merchant_name"));
+				System.out.println(i++ + product.toString());
+				prodList.add(product);
+			}
+
+			cstmt.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return prodList;
+	}
+
 
 	public static List<Product> getProductByCompleteWithoutColor(int page_num,
 			List<Integer> prod_type, List<String> merch, List<Combo> price,
