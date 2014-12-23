@@ -40,15 +40,15 @@ public class ProductDB extends Controller {
 		return conn;
 	}
 	
-	public static Result getCustomer(int cust_id) {
+	public static Product getProd(int prod_id) {
 		Statement statement = null;
 		ResultSet set = null;
 		Connection connection = null;
-		String stmt="select others.id as id,others.merchant_name as merchant_name,"
-				+"others.price as price,others.rating as rating,im.image as image from images im inner join" 
-				+"(select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
-				+"from products p inner join merchant m on p.merchant_id=m.merchant_id where p.id="+cust_id
-				+"order by p.date_added ) as others on im.id=others.id;";
+		String stmt=" select others.id as id,others.merchant_name as merchant_name,"
+				+" others.price as price,others.rating as rating,im.image as image from images im inner join" 
+				+" (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
+				+" from products p inner join merchant m on p.merchant_id=m.merchant_id where p.id="+prod_id
+				+" order by p.date_added ) as others on im.id=others.id;";
 					
 		Product prod=null;	
 		try {
@@ -90,9 +90,62 @@ public class ProductDB extends Controller {
 				}
 			}
 		}
-		return ok(product.render(prod));
+		return prod;
 	}
 
+	public static Product getProdType(int prod_id) {
+		Statement statement = null;
+		ResultSet set = null;
+		Connection connection = null;
+		String stmt="select p.type_id as type_id,p.merchant_id as merch_id,m.name as merch_name from products p inner join merchant m on p.merchant_id=m.merchant_id where p.id="+prod_id;
+		Integer prod_type=null,merch_type=null;
+		String merch_name="";
+		try {
+			connection = initializeConnection();
+			statement = connection.createStatement();
+			set = statement.executeQuery(stmt);
+			set.next();
+			prod_type=set.getInt("type_id");
+			merch_type=set.getInt("merch_id");
+			merch_name=set.getString("merch_name");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (set != null) {
+				try {
+					set.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Product prod=new Product();
+		prod.prod_type=prod_type;
+		prod.merchant=merch_name;
+		prod.merch_id=merch_type;
+				
+		return prod;
+	}
+	public static void main(String[] args){
+		ProductDB pdb=new ProductDB();
+		Product p=ProductDB.getProdType(15);
+		System.out.println(p.merch_id+" "+p.merchant+" "+p.prod_type);
+	}
 
 	
 	

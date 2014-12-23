@@ -122,7 +122,7 @@ public class RecoDB extends Controller {
 		return prodList;
 	}
 	
-	public static Result getCombinedRecoWithUserName(String username,int prod_type,String merch) throws Exception{
+	public static List<Product> getCombinedRecoWithUserName(String username,int prod_type,String merch) throws Exception{
 		
 			List<Product> list1=getProductByProdTypeAndRatingWithUserName(prod_type, username);
 			System.out.println(list1.size());
@@ -143,7 +143,7 @@ public class RecoDB extends Controller {
 			}
 			
 				System.out.println(finlist.size());
-			return ok();
+			return finlist;
 	}
 	
 	public static List<Product> getProductByProdMerchantAndRatingWithUserName(
@@ -579,7 +579,7 @@ public class RecoDB extends Controller {
 		//RecoDB.getProductByRating(1);
 		//RecoDB.getProductByProdTypeAndRatingWithUserName(1,"sowmya");
 		//RecoDB.getProductByProdTypeAndRatingWithUserName(1, "sowmya");
-		RecoDB.getCombinedRecoWithUserName("sowmya", 1,"Bhaminee");
+		RecoDB.getCombinedRecoWithUserName("", 1,"Anita Reddy");
 	}
 
 }
