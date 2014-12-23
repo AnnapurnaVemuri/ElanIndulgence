@@ -93,20 +93,19 @@
         </div>
 <!-- Slides Container -->
 
-        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 980px; height: 200px; overflow: hidden;">
+        <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 100%; height: 200px; overflow: hidden;">
         @for(product1 <- products) {
            
             
             <div class="col-sm-4 thumb" style="text-align: center">
 					                <a  href="#" >
-					                    <img class="img-responsive" src="data:image/jpg;base64,@product1.photo" height=200px width=250px alt="renderedIncorrectly">
+					                    <img class="img-responsive" src="data:image/jpg;base64,@product1.photo" height=200px width=250px id=@product1.prod_id alt="renderedIncorrectly">
 					                </a>
 					                <label>@product1.merchant</label>
 					                <input class="rating" data-size="xxs" data-disabled="true" value=@product1.rating>
 					                <label>$@product1.price</label>
 					            </div>
 					            <script>
-					            	var i = @product1.prod_id;
 					            	$("#@product1.prod_id").click(function() {
 					            		var url = window.location.href.split("/")[0];
 						        		window.location.href = url + "/product?p=" + @product1.prod_id;
