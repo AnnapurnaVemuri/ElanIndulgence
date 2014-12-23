@@ -41,5 +41,8 @@ GET		/uproduct					controllers.Application.loadUserProduct(p: String, u: String)
 # Get products by product type filter
 GET		/prodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithoutColor(t: Integer, p: Integer)
 
+# Get products for a merchant type filter
+GET		/merchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: Integer)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

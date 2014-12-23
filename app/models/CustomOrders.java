@@ -1,8 +1,11 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
 import play.db.ebean.Model;
 
 @Entity
@@ -14,4 +17,5 @@ public class CustomOrders extends Model {
 	public Date date_created;
 	public boolean status;
 	public String descr;
+	List<CustomOrderMessages> messages;
 }
