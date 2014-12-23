@@ -141,7 +141,7 @@ public class FilterDB extends Controller {
 		while (rs.next()) {
 			list.add(rs.getInt("color_id"));
 		}
-		if (list.size() > 0) {
+		if (list.size() == 0) {
 			getProductByProdTypeAndRatingWithoutColor(prod_type, page_num);
 		} else {
 			getProductByProdTypeAndRatingWithColor(page_num, prod_type, list);
