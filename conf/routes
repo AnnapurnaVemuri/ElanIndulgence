@@ -42,13 +42,13 @@ GET		/uproduct					controllers.Application.loadUserProduct(p: String, u: String)
 GET		/prodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithoutColor(t: Integer, p: Integer)
 
 # Get products by product type filter
-GET		/uprodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithUserName( p: Integer,t: Integer,u: String)
+GET		/uprodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithUserName( t: Integer,u: String,p: Integer)
 
 
 # Get products for a merchant type filter
 GET		/merchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: Integer)
 
-GET		/umerchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: Integer)
+GET		/umerchTy					controllers.Application.getProductsOfMerchantWithUname(t: Integer,u: String, p: Integer)
 
 # Add custom order
 POST	/custorder					controllers.Application.addCustomOrder()
