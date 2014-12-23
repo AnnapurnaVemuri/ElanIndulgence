@@ -19,21 +19,21 @@
     <body>
     	@userheader(u, "FALSE", "FALSE", null)
     	@usernav(u)
-    	@recom(finallist)
-    	<div class="container">
-			<div class="row">
-				<div class="col-sm-6" style="width: 400px;">
-					<img src="data:image/jpg;base64,@p.photo">
-				</div>
+    	@recom(u, finallist)
+    	<div class="container-fluid" style="margin:0px;margin-left:50px;padding-top:20px;">
+			<div class="row" style="width:1600px">
 				<div class="col-sm-6">
-					<div class="jumbotron" style="margin-bottom: 0px;margin-left: 250px;width: 520px;text-align: center">
+					<img src="data:image/jpg;base64,@p.photo"  hspace=20px vspace=20px>
+				</div>
+				<div class="col-sm-3" align=right vspace=20px hspace=20px>
+					<div class="jumbotron" style="margin-top: 200px;border: 1px solid #ccc;background-color: lightgrey;margin-bottom: 0px;text-align: center">
 		  				<label style="text-transform: uppercase;font-size: x-large;">@p.merchant</label>
 		  				<input class="rating" data-size="xxs" data-disabled="true" value=@p.rating>
 		  				<label style="font-size: large;">$@p.price</label>
 		  				<!-- <p>Quantity Available</p> -->
 		  				<div class="container">
 		  					<div class="row">
-		  						<div class="col-sm-4">
+		  						<div class="col-sm-4 col-sm-offset-1">
 		  							<div class="btn-group">
 		  								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; height: 32px; line-height:16px; margin-right: 0px;">Size Selection <span class="caret"></span></button>
 		  								<ul class="dropdown-menu" role="menu">
@@ -48,9 +48,8 @@
 		  								</ul>
 									</div>	
 		  						</div> 
-		  						<div class="col-sm-4">
-		  							<a class="btn btn-primary btn-md" href="#" role="button" style="
-		    							margin-left: 40px;" data-toggle="modal" data-target="#loginmodal">Buy Now!</a>
+		  						<div class="col-sm-4 col-sm-offset-1">
+		  							<a class="btn btn-primary btn-md" href="#" role="button" style="margin-left: 40px;">Buy Now!</a>
 		  						</div>
 		  					</div>
 						</div>

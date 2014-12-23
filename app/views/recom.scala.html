@@ -1,4 +1,4 @@
-@(products : List[Product])
+@(username:String, products : List[Product])
 <script type="text/javascript" src="@routes.Assets.at("javascripts/slider/jquery-1.9.1.min.js")"></script>
     <!-- use jssor.slider.mini.js (40KB) instead for release -->
     <!-- jssor.slider.mini.js = (jssor.js + jssor.slider.js) -->
@@ -105,12 +105,22 @@
 					                <input class="rating" data-size="xxs" data-disabled="true" value=@product1.rating>
 					                <label>$@product1.price</label>
 					            </div>
-					            <script>
+					            
+						@if(username != null) {
+							<script>
+					            	$("#@product1.prod_id").click(function() {
+					            		var url = window.location.href.split("/")[0];
+						        		window.location.href = url + "/uproduct?u=@username&p=" + @product1.prod_id;
+					            	});
+					        </script>
+						} else {
+							<script>
 					            	$("#@product1.prod_id").click(function() {
 					            		var url = window.location.href.split("/")[0];
 						        		window.location.href = url + "/product?p=" + @product1.prod_id;
 					            	});
-					            </script>
+					        </script>
+						}		            
             }
            
         </div>

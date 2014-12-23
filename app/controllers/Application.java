@@ -178,6 +178,7 @@ public class Application extends Controller {
 		}
     	return ok(productlist.render(prods));
     }
+    
     public static Result getProductsOfMerchantWithUname(int merchant_id,String uname, int page_num) {
     	List<Product> prods = new ArrayList<Product>();
     	try {
@@ -185,7 +186,7 @@ public class Application extends Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return ok(productlist.render(prods));
+    	return ok(userproductlist.render(uname, prods));
     }
     
     
