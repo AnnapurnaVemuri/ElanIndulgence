@@ -15,6 +15,7 @@ import models.Product;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.productlist;
+import views.html.userproductlist;
 
 public class FilterDB extends Controller {
 	private static String db_url = "jdbc:postgresql://cloudproj.ct233hyipvfx.us-east-1.rds.amazonaws.com:5432/elandb";
@@ -147,7 +148,7 @@ public class FilterDB extends Controller {
 		} else {
 			rlist=FilterDBReturnList.getProductByProdTypeAndRatingWithColor(page_num, prod_type, list);
 		}
-		return ok();
+		return ok( userproductlist.render(username,rlist));
 
 	}
 

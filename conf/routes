@@ -41,8 +41,14 @@ GET		/uproduct					controllers.Application.loadUserProduct(p: String, u: String)
 # Get products by product type filter
 GET		/prodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithoutColor(t: Integer, p: Integer)
 
+# Get products by product type filter
+GET		/uprodTy						controllers.FilterDB.getProductByProdTypeAndRatingWithUserName( p: Integer,t: Integer,u: String)
+
+
 # Get products for a merchant type filter
 GET		/merchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: Integer)
+
+GET		/umerchTy					controllers.Application.getProductsOfMerchant(t: Integer, p: Integer)
 
 # Add custom order
 POST	/custorder					controllers.Application.addCustomOrder()

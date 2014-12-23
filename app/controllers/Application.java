@@ -179,6 +179,8 @@ public class Application extends Controller {
     	return ok(productlist.render(prods));
     }
     
+    
+    
     public static Result getMerchant(String user, int page_num) {
     	List<Integer> merchantList = new ArrayList<Integer>();
     	merchantList.add(1);
