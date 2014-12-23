@@ -1,4 +1,4 @@
-@(user: String, register: String, showorders: String, orders: List[CustomizedOrders])
+@(user: String, register: String, showorders: String, orders : List[CustomizedOrders])
 
 <div>
 	<div class="header">
@@ -18,7 +18,7 @@
 					data-toggle="modal" data-target="#prefmodal"
 					style="font-size: 10px;font-family: fantasy">PREFERENCES</a></li>
 				<li class="divider"></li>
-				<li><a href="#" style="font-size: 10px;font-family: fantasy" class="transparent" id="orderstab">ORDERS</a></li>
+				<li><a href="#" data-toggle="modal" data-target="#somemodal" style="font-size: 10px;font-family: fantasy" class="transparent" id="orderstab">ORDERS</a></li>
 				<li class="divider"></li>
 				<li><a href="#" style="font-size: 10px;font-family: fantasy" class="transparent" >RATINGS</a></li>
 				<li class="divider"></li>
@@ -29,16 +29,17 @@
 		<a href="#" role="button" class="btn user" data-toggle="modal" data-target="#custordermodal">Customize your order!</a>
 	</div>
 	
-	<div id="ordersmodal" class="modal fade" role="dialog" aria-labelledby="ordersModal">
+	<div id="somemodal" class="modal fade in" role="dialog"
+		aria-labelledby="someaModal">
 		<div class="modal-dialog" style="width: 800px; margin-top: 50px;">
-			<div class="modal-content" style="height: 550px">
+			<div class="modal-content" style="height: 600px">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
 					<h3 class="loginh3" style="font-family: fantasy;font-weight: bold">Welcome @{user}, Your orders</h3>
 				</div>
 				<div class="modal-body" id="omodal">
-					@merchantorder(orders)
+					@merchantorder(orders, true)
 				</div>
 			</div>
 		</div>
@@ -46,7 +47,7 @@
 	@register match { 
 			case "TRUE" => {
 							<script type="text/javascript">
-							    $(document).load(function(){
+							    $(window).load(function(){
 							        $("#prefmodal").modal('show');
 							    });
 							</script>
@@ -56,20 +57,21 @@
 	@showorders match { 
 			case "TRUE" => {
 							<script type="text/javascript">
-								window.onload = function () {
-									$("#ordersmodal").modal('show');
-								}
+								$(window).load(function(){
+							        $("#somemodal").modal('show');
+							    });
 							</script>
 						   }
 			case "FALSE" => { } 
 		}
-	<script>
+	<!-- <script>
 		$("#orderstab").click(function() {
 			var url = window.location.href.split("/")[0];
 			window.location.href = url + "/userorder?u=@user";
 		});
 	</script>
-	<div id="prefmodal" class="modal fade" role="dialog"
+	 -->
+	<div id="prefmodal" class="modal fade in" role="dialog"
 		aria-labelledby="prefModal">
 		<div class="modal-dialog" style="width: 800px; margin-top: 50px;">
 			<div class="modal-content" style="height: 550px">
@@ -249,7 +251,7 @@
 				</div>      
 				<div class="modal-body" id="custOrdBody">
 					<div class="container" style="width:750px;text-align: center">
-						<form  class="form-horizontal" method="post" action="@routes.Application.addCustomOrder()">
+						<form class="form-horizontal" method="post" action="@routes.Application.addCustomOrder()">
 							<div class="form-group hide">
 								<label for="custusername">Customer Name</label>
 								<input type="text" name="custusername" class="form-control" value=@user>
