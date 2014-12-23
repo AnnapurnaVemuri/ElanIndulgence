@@ -1,36 +1,29 @@
-@(orders: List[CustomOrders])
+@(orders: List[CustomizedOrders])
 
 <div role="tabpanel">
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-  	@for(order <- orders) {
-  		<li role="presentation" class="active"><a href="#@order.id" aria-controls="home" role="tab" data-toggle="tab">@order.id</a></li>
-	}
+	  @if(orders != null) {
+	  	@for(order <- orders) {
+	  		<li role="presentation" class="active"><a href="#@order.id" aria-controls="home" role="tab" data-toggle="tab">Order #@order.id</a></li>
+		}
+	  }
   </ul>
 
   <div class="tab-content">
-  	@for(order <- orders) {
-  		<div role="tabpanel" class="tab-pane active" id=@order.id>
-  			<label> Order Id: @order.id</label>
-  			<label> Customer name: @order.cust_id</label>
-  			<label> Description: @order.descr</label>
-  			<div class="pre-scrollable">
-  				@for(msg <- order.messages) {
-	  					@msg.fromCust match {
-	  						case true => {
-	  							<label>@order.cust_id :
-	  						}
-	  						case false => {
-	  							<label>@order.merchant_id :
-	  						}
-	  					}
-	  					@msg.message - @msg.date_created</label>
-	  			}
-	  			<textarea id="msgarea" rows="5" cols="10"></textarea>
-	  			<button id="sendMsg"></button>
-  			</div>
-  		</div>
+  	@if(orders != null) {
+  		@for(order <- orders) {
+	  		<div role="tabpanel" class="tab-pane active" id=@order.id>
+	  			<label> Order Id: @order.id</label>
+	  			<label> Customer name: @order.custusername</label>
+	  			<label> Merchant name: @order.merchantname</label>
+	  			<label> Product ordered: @order.prodtype</label>
+	  			<label> Colors Preferred: @order.colorsList</label>
+	  			<label> Budget Range: @order.budgetrange</label>
+	  			<label> Description: @order.description</label>
+	  		</div>
+	  	}
   	}
   </div>
 </div>

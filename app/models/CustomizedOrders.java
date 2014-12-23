@@ -22,4 +22,14 @@ public class CustomizedOrders extends Model {
 	public String budgetrange;
 	public String description;
 	public String colorsList;
+	
+	public static Finder<String,CustomizedOrders> find = new Finder<String,CustomizedOrders>(
+	        String.class, CustomizedOrders.class
+	); 
+	
+	public static List<CustomizedOrders> findInvolving(String user) {
+        return find.where()
+            .eq("custusername", user)
+            .findList();
+    }
 }
