@@ -227,7 +227,7 @@ public class FilterDB extends Controller {
 		public Integer end;
 	}
 
-	public static List<Product> getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<String> merch,
+	public static List<Product> getProductByCompleteWithoutColor(int page_num, List<Integer> prod_type,List<Integer> merchant,
 			List<Combo> price,List<Integer> rating)//, List<Integer> merchant, List<Combo> price,List<Integer> rating)
 			throws Exception {
 		List<Product> prodList = new ArrayList<Product>();
@@ -237,19 +237,6 @@ public class FilterDB extends Controller {
 		Connection connection = null;
 		int start = 12 * (page_num - 1) + 1, end = 12 * page_num;
 		boolean where = false;
-		List<Integer> merchant = new ArrayList<Integer>();
-
-		for (String m : merch) {
-			String merch_st = "select merchant_id from merchant where name='"
-					+ m + "'";
-			statement = conn.createStatement();
-			rs = statement.executeQuery(merch_st);
-
-			while (rs.next()) {
-				merchant.add(rs.getInt("merchant_id"));
-
-			}
-		}
 
 		String ptype = "";
 		if (prod_type.size() > 0) {
@@ -568,9 +555,9 @@ public class FilterDB extends Controller {
 		List<Integer> ptype = new ArrayList<Integer>();
 		// ptype.add(1);
 		// ptype.add(2);
-		List<String> mtype = new ArrayList<String>();
-		mtype.add("Bhargavi Kunam");
-		mtype.add("Pawan & Pranav haute coture");
+		List<Integer> mtype = new ArrayList<Integer>();
+		mtype.add(2);
+		mtype.add(3);
 		List<Integer> ctype = new ArrayList<Integer>();
 		ctype.add(5);
 		// ctype.add(7);

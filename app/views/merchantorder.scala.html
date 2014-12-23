@@ -1,0 +1,25 @@
+@(orders: List[CustomOrders])
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+  	@for(order <- orders) {
+  		<li role="presentation" class="active"><a href="#@order.id" aria-controls="home" role="tab" data-toggle="tab">@order.id</a></li>
+	}
+  </ul>
+
+  <div class="tab-content">
+  	@for(order <- orders) {
+  		<div role="tabpanel" class="tab-pane active" id=@order.id>
+  			<label> Order Id: @order.id</label>
+  			<label> Customer name: @order.cust_id</label>
+  			<label> Description: @order.descr</label>
+  			<div class="pre-scrollable">
+  				
+  			</div>
+  		</div>
+  	}
+  </div>
+
+</div>
