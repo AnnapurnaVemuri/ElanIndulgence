@@ -5,7 +5,7 @@
 		<a href="@routes.Application.loadMain()" role="button"
 			class="transparent logo">Elan Indulgence</a>
 		<div class="btn-group user">
-			<button type="button" class="btn user" style="font-family: fantasy">Welcome @{user}</button>
+			<button type="button" class="btn user">Welcome @{user}</button>
 			<button type="button" class="btn dropdown-toggle user"
 				data-toggle="dropdown" aria-expanded="false">
 				<span class="caret"></span> <span class="sr-only">Toggle
@@ -26,6 +26,7 @@
 					style="font-size: 10px;font-family: fantasy" class="transparent" >LOGOUT</a></li>
 			</ul>
 		</div>
+		<a href="#" role="button" class="btn user" data-toggle="modal" data-target="#custordermodal">Customize your order!</a>
 	</div>
 	@register match { 
 			case "TRUE" => {
@@ -204,6 +205,105 @@
 				            <button type="button" class="btn btn-default prefSave" data-dismiss="modal">Save</button>
 				        </div>
 					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="custordermodal" class="modal fade" role="dialog" aria-labelledby="custOrdModal">  
+		<div class="modal-dialog" style="width: 800px; margin-top: 75px">
+			<div class="modal-content">
+				<div class="modal-header">  
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="loginh3" style="font-family: fantasy;font-weight: bold">Place a customer order!</h3>
+				</div>      
+				<div class="modal-body" id="custOrdBody">
+					<div class="container" style="width:750px;text-align: center">
+						<form  class="form-horizontal" method="post" action="@routes.Application.addCustomOrder()">
+							<div class="form-group hide">
+								<label for="custusername">Customer Name</label>
+								<input type="text" name="custusername" class="form-control" value=@user>
+							</div>
+							<div class="form-group">
+								<label for="merchantselect" class="col-sm-3 control-label">Select Designer/Boutique:</label>
+								<div class="col-sm-8">
+									<select class="form-control" id="merchantselect" name="merchantname">
+								    	<option>Anita Reddy</option>
+								    	<option>Bhargavi Kunam</option>
+								    	<option>Pawan &amp; Pranav haute coture</option>
+								    	<option>Sridevi &amp; Swapna</option>
+								    	<option>Varuni Gopen</option>
+								    	<option>Bhaminee</option>
+								    	<option>Manya Collections</option>
+								    	<option>Polka Dots</option>
+								    	<option>Samyakk</option>
+								    	<option>Sanvi</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="prodtypeselect" class="col-sm-3 control-label">Select Product Type:</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"><input type="radio" name="prodtype" value="SAREES">SAREES</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="LEHENGAS">LEHENGAS</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="KURTIS">KURTIS</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="SALWAR KAMEEZ">SALWAR KAMEEZ</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="DRESSES">DRESSES</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="JEWELLERY">JEWELLERY</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="BAGS">BAGS</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="FOOTWEAR">FOOTWEAR</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="SCARVES">SCARVES</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="SHERWANI">SHERWANI</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="KURTAS">KURTAS</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="SUITS">SUITS</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="KIDS GIRLS ETHNIC">KIDS GIRLS ETHNIC</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="KIDS GIRLS DRESSES">KIDS GIRLS DRESSES</label>
+									<label class="radio-inline"><input type="radio" name="prodtype" value="KIDS BOYS ETHNIC">KIDS BOYS ETHNIC</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="budgetselect" class="col-sm-3 control-label">Select Budget Range</label>
+								<div class="col-sm-8">
+									<select class="form-control" id="budgetselect" name="budgetrange">
+								    	<option>0-30</option>
+								    	<option>30-50</option>
+								    	<option>50-70</option>
+								    	<option>70-100</option>
+								    	<option>100+</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="colorselect" class="col-sm-3 control-label">Select Colors: </label>
+								<div class="col-sm-8">
+									<label class="checkbox-inline" style="font-size: 12px; color: red"><input type="checkbox" name="prefcolors[0]" value="RED">RED</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: blue"><input type="checkbox" name="prefcolors[1]" value="BLUE">BLUE</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: green"><input type="checkbox" name="prefcolors[2]" value="GREEN">GREEN</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: black"><input type="checkbox" name="prefcolors[3]" value="BLACK">BLACK</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: yellow"><input type="checkbox" name="prefcolors[4]" value="YELLOW">YELLOW</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: silver"><input type="checkbox" name="prefcolors[5]" value="SILVER">SILVER</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: gold"><input type="checkbox" name="prefcolors[6]" value="GOLD">GOLD</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: purple"><input type="checkbox" name="prefcolors[7]" value="PURPLE">PURPLE</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: pink"><input type="checkbox" name="prefcolors[8]" value="PINK">PINK</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: orange"><input type="checkbox" name="prefcolors[9]" value="ORANGE">ORANGE</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: cream"><input type="checkbox" name="prefcolors[10]" value="CREAM">CREAM</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: #e1ebf3"><input type="checkbox" name="prefcolors[11]" value="WHITE">WHITE</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: grey"><input type="checkbox" name="prefcolors[12]" value="GREY">GREY</label>
+									<label class="checkbox-inline" style="font-size: 12px; color: brown"><input type="checkbox" name="prefcolors[13]" value="BROWN">BROWN</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="description" class="col-sm-3 control-label">Description:</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="5" id="description" name="description"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+				            	<div class="col-sm-10 col-sm-offset-4">
+				                	<button type="submit" class="btn btn-default prefSave" style="width:125px">Save Order</button>
+				                </div>
+				            </div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

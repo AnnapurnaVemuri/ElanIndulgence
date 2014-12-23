@@ -74,6 +74,7 @@ label {
 	background-image: linear-gradient(to bottom,#fff 0,#f0f5f9 100%) !important;
 	font-size: 13px !important;
 	color: #628baf !important;
+	font-family: fantasy;
 }
 
 .prefSave {

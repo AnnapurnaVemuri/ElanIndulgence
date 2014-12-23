@@ -17,5 +17,5 @@ public class CustomOrders extends Model {
 	public Date date_created;
 	public boolean status;
 	public String descr;
-	List<CustomOrderMessages> messages;
+	public List<CustomOrderMessages> messages;
 }
