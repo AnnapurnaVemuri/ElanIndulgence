@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import views.html.*;
@@ -40,7 +42,7 @@ public class RecoDB extends Controller {
 		return conn;
 	}
 
-	private static Result getProductByMerchantAndRating(int prod_type,
+	private static List<Product> getProductByMerchantAndRating(int prod_type,
 			String merch) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
@@ -53,7 +55,7 @@ public class RecoDB extends Controller {
 		int merchant_type=rs.getInt("merchant_id");
 
 		
-
+		List<Product> prodList=null;
 		
 		Connection connection = null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchantWithoutColor(prod_type1 integer,merchant_id1 integer ) "
@@ -79,7 +81,7 @@ public class RecoDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
+			prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -117,15 +119,89 @@ public class RecoDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
+	}
+	
+	public static Result getCombinedRecoWithUserName(String username,int prod_type,String merch) throws Exception{
+		
+			List<Product> list1=getProductByProdTypeAndRatingWithUserName(prod_type, username);
+			System.out.println(list1.size());
+			List<Product> list2=getProductByProdMerchantAndRatingWithUserName(prod_type, merch, username);
+			System.out.println(list2.size());
+			HashMap<Integer,Integer> map=new HashMap<Integer,Integer>();
+			List<Product> finlist=new ArrayList<Product>();
+			for(int i=0;i<list1.size();i++){
+				map.put(list1.get(i).prod_id,1);
+				finlist.add(list1.get(i));
+			}
+			for(int i=0;i<list2.size();i++){
+				if(map.get(list2.get(i).prod_id)!=null){
+					continue;
+				}
+				
+				finlist.add(list2.get(i));
+			}
+			
+				System.out.println(finlist.size());
+			return ok();
+	}
+	
+	public static List<Product> getProductByProdMerchantAndRatingWithUserName(
+			 int prod_type, String merch,String username) throws Exception {
+
+		Connection conn = initializeConnection();
+		String stmt = "select color_id from user_prefs where user_name='"
+				+ username + "'";
+		Statement statement = null;
+		ResultSet rs = null;
+
+		statement = conn.createStatement();
+		rs = statement.executeQuery(stmt);
+		List<Integer> list = new ArrayList<Integer>();
+		while (rs.next()) {
+			list.add(rs.getInt("color_id"));
+		}
+		if (list.size() <= 0) {
+			return getProductByMerchantAndRating(prod_type, merch);
+		} else {
+			return getProductByMerchantAndRatingWithColor(prod_type, merch, list);
+		}
+		
+
 	}
 
-	public static Result getProductByRating(int prod_type)
+	
+	public static List<Product> getProductByProdTypeAndRatingWithUserName(
+			 int prod_type, String username) throws Exception {
+
+		Connection conn = initializeConnection();
+		String stmt = "select color_id from user_prefs where user_name='"
+				+ username + "'";
+		Statement statement = null;
+		ResultSet rs = null;
+		
+		statement = conn.createStatement();
+		rs = statement.executeQuery(stmt);
+		List<Integer> list = new ArrayList<Integer>();
+		while (rs.next()) {
+			list.add(rs.getInt("color_id"));
+		}
+		if (list.size() <= 0) {
+			return getProductByRating(prod_type);
+		} else {
+			return getProductByRatingWithColor(prod_type,list);
+		}
+		
+
+	}
+
+	public static List<Product> getProductByRating(int prod_type)
 			throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
+		List<Product> prodList=null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoForProductWithoutColor(prod_type1 integer) "
 
 				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
@@ -148,7 +224,7 @@ public class RecoDB extends Controller {
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
+			prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -186,15 +262,21 @@ public class RecoDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
 	}
 
 	
-	private static Result getProductByMerchantAndRatingWithColor(int prod_type,
-			String merch, int color_id) throws Exception {
+	private static List<Product> getProductByMerchantAndRatingWithColor(int prod_type,
+			String merch, List<Integer> color) throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
+
+		String ctype = "";
+		ctype += color.get(0);
+		for (int i = 1; i < color.size(); i++)
+			ctype += "," + color.get(i);
+
 		
 		String merch_st="select merchant_id from merchant where name='"+merch+"'";		
 		statement = conn.createStatement();
@@ -204,14 +286,14 @@ public class RecoDB extends Controller {
 		int merchant_type=rs.getInt("merchant_id");
 
 
-		
+		List<Product> prodList=null;
 		Connection connection = null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoByMerchant(prod_type1 integer,merchant_id1 integer,color_id1 integer ) "
 
 				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
 				+ " return query select others.id,others.merchant_name,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
 				+ " from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id"
-				+ " where p.type_id=prod_type1 and  p.merchant_id=merchant_id1 and pc.color_id=color_id1 order by p.rating desc limit 6) as others on im.id=others.id;"
+				+ " where p.type_id=prod_type1 and  p.merchant_id=merchant_id1 and pc.color_id IN ("+ctype+") order by p.rating desc limit 6) as others on im.id=others.id;"
 				+ " end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
 		try {
 			connection = conn;
@@ -225,12 +307,12 @@ public class RecoDB extends Controller {
 
 			cstmt.setInt(1, prod_type); // The name argument is the second ?
 			cstmt.setInt(2, merchant_type); // The raise argument is the third ?
-			cstmt.setInt(3, color_id); // The name argument is the second ?
+			cstmt.setInt(3, 0); // The name argument is the second ?
 			cstmt.execute();
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
+			prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -268,21 +350,28 @@ public class RecoDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
 	}
 
-	private static Result getProductByRatingWithColor(int prod_type, int color_id)
+	private static List<Product> getProductByRatingWithColor(int prod_type, List<Integer> color)
 			throws Exception {
 		Connection conn = initializeConnection();
 		Statement statement = null;
 		ResultSet rs = null;
 		Connection connection = null;
+		
+		String ctype = "";
+		ctype += color.get(0);
+		for (int i = 1; i < color.size(); i++)
+			ctype += "," + color.get(i);
+
+		List<Product> prodList=null;
 		String stmt = "CREATE OR REPLACE  FUNCTION RecoForProduct(prod_type1 integer,color_id1 integer ) "
 
 				+ " returns TABLE (id integer,merchant_name character varying(255),price double precision,rating double precision,image bytea)  as $$ begin "
 				+ " return query select others.id,others.merchant_name,others.price,others.rating,im.image from images im inner join (select p.id as id,m.name as merchant_name,p.price as price,p.rating as rating"
 				+ " from products p inner join merchant m on p.merchant_id=m.merchant_id inner join product_color pc on p.id=pc.product_id"
-				+ " where p.type_id=prod_type1 and pc.color_id=color_id1 order by p.rating desc limit 12) as others on im.id=others.id;"
+				+ " where p.type_id=prod_type1 and pc.color_id IN ("+ctype+") order by p.rating desc limit 12) as others on im.id=others.id;"
 				+ " end $$ LANGUAGE 'plpgsql' IMMUTABLE SECURITY DEFINER COST 10 ";
 		try {
 			connection = conn;
@@ -295,12 +384,12 @@ public class RecoDB extends Controller {
 					.prepareCall("{call  RecoForProduct(?,?)}");
 
 			cstmt.setInt(1, prod_type); // The name argument is the second ?
-			cstmt.setInt(2, color_id); // The name argument is the second ?
+			cstmt.setInt(2, 0); // The name argument is the second ?
 			cstmt.execute();
 
 			ResultSet set = ((ResultSet) cstmt.getResultSet());
 			int i = 1;
-			List<Product> prodList = new ArrayList<Product>();
+		prodList = new ArrayList<Product>();
 			while (set.next()) {
 				byte[] b = set.getBytes("image");
 				Product product = new Product(set.getInt("id"),
@@ -338,8 +427,10 @@ public class RecoDB extends Controller {
 				}
 			}
 		}
-		return ok();
+		return prodList;
 	}
+	
+	
 	
 	public static Result getLatestProductsForUser(int page_num, String u) {
 		Connection conn = initializeConnection();
@@ -482,10 +573,13 @@ public class RecoDB extends Controller {
 	public static void main(String[] args) throws Exception {
 		RecoDB r = new RecoDB();
 	//	 RecoDB.getProductByRatingWithColor(1, 1);
-		 RecoDB.getProductByMerchantAndRatingWithColor(1, "Bhaminee", 1);
+		// RecoDB.getProductByMerchantAndRatingWithColor(1, "Bhaminee", 1);
 		//RecoDB.getLatestProducts(2);
-		RecoDB.getProductByMerchantAndRating(1,"Bhaminee");
+		//RecoDB.getProductByMerchantAndRating(1,"Bhaminee");
 		//RecoDB.getProductByRating(1);
+		//RecoDB.getProductByProdTypeAndRatingWithUserName(1,"sowmya");
+		//RecoDB.getProductByProdTypeAndRatingWithUserName(1, "sowmya");
+		RecoDB.getCombinedRecoWithUserName("sowmya", 1,"Bhaminee");
 	}
 
 }
