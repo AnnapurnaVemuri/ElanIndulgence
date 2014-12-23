@@ -178,6 +178,15 @@ public class Application extends Controller {
 		}
     	return ok(productlist.render(prods));
     }
+    public static Result getProductsOfMerchantWithUname(int merchant_id,String uname, int page_num) {
+    	List<Product> prods = new ArrayList<Product>();
+    	try {
+			prods = FilterDB.getProductByMerchIDAndRatingWithUserName(page_num, merchant_id,uname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return ok(productlist.render(prods));
+    }
     
     
     
