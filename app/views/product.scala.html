@@ -19,16 +19,14 @@
     <body>
     	@header()
     	@navigation()
-    	@recom(finallist)
+    	@recom(null, finallist)
     	<div class="container-fluid" style="margin:0px;margin-left:50px">
 			<div class="row" style="width:1600px">
 				<div class="col-xs-6">
 					<img src="data:image/jpg;base64,@p.photo" hspace=20px vspace=20px>
 				</div>
 				<div class="col-xs-3" align=right vspace=20px hspace=20px>
-					<div  class="jumbotron"  style="margin-top: 200px;
-border: 1px solid #ccc;
-background-color: lightgrey;margin-bottom: 0px;margin-left: 250px;width: 520px;text-align: center">
+					<div  class="jumbotron"  style="margin-top: 200px;border: 1px solid #ccc;background-color: lightgrey;margin-bottom: 0px;text-align: center">
 		  				<label style="text-transform: uppercase;font-size: x-large;">@p.merchant</label>
 		  				<input class="rating" data-size="xxs" data-disabled="true" value=@p.rating>
 		  				<label style="font-size: large;">$@p.price</label>
